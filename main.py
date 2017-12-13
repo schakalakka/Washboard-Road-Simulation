@@ -56,7 +56,7 @@ def max_bump_height(road: np.ndarray, position: int, wheel_size: int) -> int:
     :param wheel_size: int, width of the wheel
     :return: int, the bump height
     """
-    return np.max(road[position + 1:position + 1 + wheel_size])
+    return np.max(road[ (position + 1) : (position + 1 + wheel_size) ])
 
 
 def jump(from_position: int, bump_heigth: int, velocity: int, road_length: int) -> int:
