@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Tuple
-
+import sys
 
 def initialize_road(size: int, standard_height: int, nr_of_random_irregularities: int) -> np.ndarray:
     """
@@ -17,10 +17,11 @@ def initialize_road(size: int, standard_height: int, nr_of_random_irregularities
 
 
 def smoothing(road: np.ndarray) -> np.ndarray:
+
     pass
 
 
-def determine_bumb_height(road: np.ndarray, position: int, wheel_size: int, method='max') -> int:
+def determine_bump_height(road: np.ndarray, position: int, wheel_size: int, method='max') -> int:
     """
     General bump height function, returns the bump height of a position on a road for a given
     wheel_size and method
@@ -30,8 +31,19 @@ def determine_bumb_height(road: np.ndarray, position: int, wheel_size: int, meth
     :param method: str, 'max'
     :return: int, bump height
     """
+    available_methods = list(['max', 'max'])
+    default_method = 'max'
+    method = method
+
+    if method not in available_methods:
+        print("The bump_height method '",  method  ,"' does not exist. Using default method '", default_method, "'")
+        method = 'max'
+
+
     if method == 'max':
         return max_bump_height(road, position, wheel_size)
+
+
 
 
 def max_bump_height(road: np.ndarray, position: int, wheel_size: int) -> int:
@@ -126,7 +138,7 @@ def wheel_pass(road: np.ndarray, wheel_size: int, velocity: int, max_iterations:
                 pos = 0
                 iteration += 1
         else:
-            bump_height = determine_bumb_height(road, pos, wheel_size, method=bump_method)
+            bump_height = determine_bump_height(road, pos, wheel_size, method=bump_method)
             new_pos = jump(from_position=pos, bump_heigth=bump_height, velocity=velocity, road_length=len(road))
             road, new_pos = digging(road, new_pos, wheel_size, method=dig_method)
             if new_pos < pos:
