@@ -53,6 +53,16 @@ class Wheel:
             self.xf = new_xf
 
 
+class Road:
+    def __init__(self, length: int, standard_height: int):
+        self.piles = np.full(length, standard_height, dtype=np.int)
+        self.size = length
+        self.height = standard_height
+    def add_random_irregularities(self, nr_of_random_irregularities: int):
+        irregular_positions = np.random.randint(0, len(self.piles), nr_of_random_irregularities)
+        self.piles[irregular_positions] = [self.height + 1] * nr_of_random_irregularities
+        
+
 def initialize_road(size: int, standard_height: int, nr_of_random_irregularities: int) -> np.ndarray:
     """
     Initializes a numpy array of a given length with a standard height and several small irregular bumps
