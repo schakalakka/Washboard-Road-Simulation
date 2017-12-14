@@ -58,10 +58,29 @@ class Road:
         self.piles = np.full(length, standard_height, dtype=np.int)
         self.size = length
         self.height = standard_height
+
     def add_random_irregularities(self, nr_of_random_irregularities: int):
         irregular_positions = np.random.randint(0, len(self.piles), nr_of_random_irregularities)
         self.piles[irregular_positions] = [self.height + 1] * nr_of_random_irregularities
-        
+
+    def add_grain(self, position: int, n_grains: int):
+        self.piles[position] += n_grains
+
+    def remove_grain(self, position: int, n_grains: int):
+        self.piles[position] -= n_grains
+
+    def add_grains(self, positions: list, n_grains: list):
+        counter = 0
+        for position in positions:
+            self.add_grain(self, positions[position], n_grains[counter])
+            counter += 1
+
+    def remove_grains(self, positions: list, n_grains: list):
+        counter = 0
+        for position in positions:
+            self.remove_grain(self, positions[position], n_grains[counter])
+            counter += 1
+
 
 def initialize_road(size: int, standard_height: int, nr_of_random_irregularities: int) -> np.ndarray:
     """
