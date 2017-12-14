@@ -1,6 +1,45 @@
 import numpy as np
 from typing import Tuple
+
 import sys
+#CLASSES
+
+class Wheel:
+    """
+    Object that represents a vehicle wheel
+    """
+    def __init__(self, diameter: int, right_position: int, elevation: int, period: int):
+        self.diameter = diameter
+        self.x0 = diameter - right_position #Care, now it could be negative
+        self.xf = right_position
+        self.elevation = elevation
+        self.period = period
+
+    def get_diameter(self):
+        return self.diameter
+    def get_x0(self):
+        return self.x0
+    def get_xf(self):
+        return self.xf
+
+    def set_diameter(self, new_diameter: int):
+        if new_diameter <= 0:
+            print ('Error: Wheel diameter can not be set to a negative number.')
+            sys.exit()
+        self.diameter = new_diameter
+    def set_x0(self, new_x0: int):
+        if new_x0 < 0:
+            print ('Intent to set x0 to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
+            self.x0 = new_x0 % self.period
+        else:
+            self.x0 = new_x0
+    def set_xf(self, new_xf: int):
+        if new_xf >= self.period:
+            print ('Intent to set xf to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
+            self.xf = new_xf % self.period
+        else:
+            self.xf = new_xf
+
 
 def initialize_road(size: int, standard_height: int, nr_of_random_irregularities: int) -> np.ndarray:
     """
