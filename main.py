@@ -8,12 +8,13 @@ class Wheel:
     """
     Object that represents a vehicle wheel
     """
-    def __init__(self, diameter: int, right_position: int, elevation: int, period: int):
+    def __init__(self, diameter: int, right_position: int, elevation: int, velocity: int, period: int):
         self.diameter = diameter
         self.x0 = diameter - right_position #Care, now it could be negative
         self.xf = right_position
         self.elevation = elevation
         self.period = period
+        self.velocity = velocity
 
     def get_diameter(self):
         return self.diameter
@@ -24,15 +25,26 @@ class Wheel:
 
     def set_diameter(self, new_diameter: int):
         if new_diameter <= 0:
-            print ('Error: Wheel diameter can not be set to a negative number.')
+            print ('Error: Wheel diameter can not be set to a negative number nor zero.')
             sys.exit()
         self.diameter = new_diameter
+
+    def set_elevation(self, new_elevation: int):
+        if new_elevation < 0:
+            print('Error: Wheel elevation can not be set to a negative number.')
+            sys.exit()
+        self.elevation = new_elevation
+
+    def set_velocity(self, new_velocity: int):
+        self.velocity = new_velocity
+
     def set_x0(self, new_x0: int):
         if new_x0 < 0:
             print ('Intent to set x0 to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
             self.x0 = new_x0 % self.period
         else:
             self.x0 = new_x0
+
     def set_xf(self, new_xf: int):
         if new_xf >= self.period:
             print ('Intent to set xf to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
