@@ -272,8 +272,8 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         final_position = wheel.xf
         if final_position <= initial_position:
             wheel.number_of_passes += 1
-
-        print_road_surface(road, wheel.xf, wheel.diameter)
+            print_road_surface(road, wheel.xf, wheel.diameter)
+            print(f'number of grains is {road.get_number_of_grains()}')
         #if
         #iteration += 1
         #end iteration
