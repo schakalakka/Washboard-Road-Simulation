@@ -104,6 +104,7 @@ class Road:
     """
     Object that represents a Road.
     """
+
     def __init__(self, size: int, standard_height: int, irregularities='random', positions=list([1]),
                  n_grains=list([1])):
         """
@@ -116,7 +117,8 @@ class Road:
         :param n_grains:  List containing the number of grains to be added in each position of
                           the :positions: list.
         """
-        #Each pile of the road is filled with :standard_height: grains of sand
+        # Each pile of the road is filled with :standard_height: grains of sand
+        # piles is an array with height at each position of the road
         self.piles = np.full(size, standard_height, dtype=np.int)
         self.size = size
         self.height = standard_height
@@ -126,7 +128,7 @@ class Road:
         elif irregularities == 'specific':
             self.add_specific_irregularities(positions, n_grains)
 
-        #Store the number of initial grains (the total number of sand grains) that the road contains.
+        # Store the number of initial grains (the total number of sand grains) that the road contains.
         self.initial_number_of_grains = self.get_number_of_grains()
 
     def get_number_of_grains(self) -> int:
@@ -218,10 +220,10 @@ def move_to_next_bump(road: Road, wheel: Wheel) -> int:
               "\nThere are no bumps according to the current criteria\n")
         sys.exit()
 
-    #The position that is just before the 'real' bump position is stored in the bump_position variable
+    # The position that is just before the 'real' bump position is stored in the bump_position variable
     bump_position = (pos_count % period) - 1
 
-    #Update the wheel's position
+    # Update the wheel's position
     wheel.set_xf(bump_position)
 
     return bump_position
@@ -231,11 +233,11 @@ def determine_bump_height(road: Road, wheel: Wheel, position: int, method='max')
     """
     General bump height function, returns the bump height of a position on a road for a given
     wheel_size and method
-    :param road: np.ndarray, array with height at each position of the road
-    :param position: int, current position on road
-    :param wheel_size: int
+    :param road: a Road
+    :param wheel: a Wheel
+    :param position: int
     :param method: str, 'max'
-    :return: int, bump height
+    :return: a bump_height function call
     """
     available_methods = list(['max', 'max'])
     default_method = 'max'
@@ -252,26 +254,26 @@ def determine_bump_height(road: Road, wheel: Wheel, position: int, method='max')
 def max_bump_height(road: Road, wheel: Wheel, position: int) -> int:
     """
     At position i determine the bump height of the next w elements/indexes/positions
-    with w being the wheel_size.
-    The bump height ist determined by taking the maximum from the positions i+1 to i+w (inclusive)
-    :param road: np.ndarray, road surface
+    with w being the wheel diameter.
+    The bump height is determined by taking the maximum from the positions i+1 to i+w (inclusive) minus
+    the current elevation of the wheel.
+    :param road: a Road
+    :param wheel: a Wheel
     :param position: int, current (front) position of the wheel
-    :param wheel_size: int, width of the wheel
-    :return: int, the bump height
+                         (it should be the first position before the bump position)
+    :return: the bump height
     """
     return np.max(road.piles[(position + 1): (position + 1 + wheel.diameter)]) - wheel.elevation
 
 
 def jump(road: Road, wheel: Wheel, bump_height: int):
     """
-    Returns the front position of the wheel after a jump
-    :param from_position:
-    :param bump_heigth:
-    :param velocity:
-    :param road_length:
-    :return:
+    Updates the wheel's position and elevation before it jumps.
+    :param road:
+    :param wheel:
+    :param bump_height: the height of the bump from which the wheel jumps
+    :return: void
     """
-    # wheel.xf = (wheel.xf + wheel.velocity * bump_height) % road.size
     wheel.update_position(wheel.velocity * bump_height)
     wheel.set_elevation(road.piles[wheel.xf])
 
