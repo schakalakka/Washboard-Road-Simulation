@@ -117,17 +117,21 @@ def smoothing(road: np.ndarray) -> np.ndarray:
 
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
-    pos_count = wheel.xf
-    while (pos_count < road.size & road.piles[pos_count] <= road.piles[wheel.xf]):
+    period = road.size
+    pos_count = wheel.xf % period
+    elevation = wheel.elevation
+    f = road.piles[pos_count]
+    statement = (pos_count < road.size) & (road.piles[pos_count % period] <= wheel.elevation)
+    while (road.piles[pos_count % period] <= wheel.elevation):
         pos_count += 1
 
-    if pos_count > road.size:
-            print("\nNo next bump found. move_to_next_bump() failed.\n")
-            sys.exit()
-    else:
-        wheel.set_xf( pos_count - 1 )
+    #if pos_count > road.size:
+          #  print("\nNo next bump found. move_to_next_bump() failed.\n")
+          #  sys.exit()
+    bump_position = (pos_count % period) - 1
+    wheel.set_xf( bump_position )
 
-    return pos_count-1
+    return bump_position
 
 def determine_bump_height(road: Road, wheel: Wheel, position: int,  method='max') -> int:
     """
@@ -258,7 +262,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         digging(road, wheel, wheel.xf, method = dig_method)
 
         print_road_surface(road, wheel.xf, wheel.diameter)
-        wheel.update_position(1)
+        wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
         elevation = wheel.elevation
         print_road_surface(road, wheel.xf, wheel.diameter)
@@ -273,7 +277,7 @@ def main():
     wheel_size = 4
     velocity = 5  # m/s
 
-    road = Road(road_size, standard_height, 'specific', list([4]), list([1]))
+    road = Road(road_size, standard_height, 'specific', list([4,40]), list([1,1]))
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
 
