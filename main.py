@@ -200,22 +200,28 @@ def smoothing(road: Road):
 
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
+    """
+    Given a Road road and a Wheel wheel, this function moves the wheel to the position
+    that is just before the next road-bump that the wheel will find.
+    :param road: a Road
+    :param wheel: a Wheel
+    :return: the position (the number of the pile) that is just before the next bump that the wheel will find.
+    """
     period = road.size
     pos_count = wheel.xf
-    # elevation = wheel.elevation
-    # f = road.piles[pos_count % period]
-    # statement = (pos_count < road.size) & (road.piles[pos_count % period] <= wheel.elevation)
+
     while (pos_count < 2 * period) & (road.piles[pos_count % period] <= wheel.elevation):
         pos_count += 1
 
     if pos_count > 2 * period:
-        print("\nNo next bump found. move_to_next_bump() failed.\n")
+        print("\nNo next bump found. move_to_next_bump() failed. ",
+              "\nThere are no bumps according to the current criteria\n")
         sys.exit()
 
-    # if pos_count >= period:
-    # wheel.number_of_passes += 1
-
+    #The position that is just before the 'real' bump position is stored in the bump_position variable
     bump_position = (pos_count % period) - 1
+
+    #Update the wheel's position
     wheel.set_xf(bump_position)
 
     return bump_position
