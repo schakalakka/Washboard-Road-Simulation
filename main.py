@@ -10,8 +10,8 @@ class Wheel:
     """
     def __init__(self, diameter: int, right_position: int, elevation: int, velocity: int, period: int):
         self.diameter = diameter
-        self.x0 = diameter - right_position #Care, now it could be negative
-        self.xf = right_position
+        self.xf = right_position % period
+        self.x0 = (self.xf - self.diameter + 1) % period #Care, now it could be negative
         self.elevation = elevation
         self.period = period
         self.velocity = velocity
@@ -38,30 +38,58 @@ class Wheel:
     def set_velocity(self, new_velocity: int):
         self.velocity = new_velocity
 
-    def set_x0(self, new_x0: int):
-        if new_x0 < 0:
-            print ('Intent to set x0 to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
-            self.x0 = new_x0 % self.period
-        else:
-            self.x0 = new_x0
-
     def set_xf(self, new_xf: int):
-        if new_xf >= self.period:
+        if new_xf >= self.period or new_xf < 0:
             print ('Intent to set xf to a negative number or out of the road. Applying periodic', self.period ,'conditions.')
-            self.xf = new_xf % self.period
-        else:
-            self.xf = new_xf
+        self.xf = new_xf % self.period
+        self.x0 = (self.xf - self.diameter + 1) % self.period
+
+    def update_position(self, steps: int):
+        new_xf = self.xf + steps
+        self.set_xf(new_xf)
+    def update_velocity(self, steps: int):
+        new_velocity = self.velocity + steps
+        self.set_velocity(new_velocity)
+    def update_elevation(self, steps: int):
+        new_elevation = self.elevation + steps
+        self.set_elevation(new_elevation)
+    def update_diameter(self, steps: int):
+        new_diameter = self.diameter + steps
+        self.set_diameter(new_diameter)
+
 
 
 class Road:
-    def __init__(self, length: int, standard_height: int):
-        self.piles = np.full(length, standard_height, dtype=np.int)
-        self.size = length
+    def __init__(self, size: int, standard_height: int, irregularities = 'random', positions = list([1]), n_grains = list([1])):
+        self.piles = np.full(size, standard_height, dtype=np.int)
+        self.size = size
         self.height = standard_height
+        #self.initial_number_of_grains = size * standard_height
+
+        if irregularities == 'random':
+            self.add_random_irregularities(n_grains[0])
+        elif irregularities == 'specific':
+            self.add_specific_irregularities(positions, n_grains)
+
+        self.initial_number_of_grains = self.get_number_of_grains();
+
+    def get_number_of_grains(self):
+        return np.sum(self.piles)
 
     def add_random_irregularities(self, nr_of_random_irregularities: int):
         irregular_positions = np.random.randint(0, len(self.piles), nr_of_random_irregularities)
         self.piles[irregular_positions] = [self.height + 1] * nr_of_random_irregularities
+        #self.initial_number_of_grains += nr_of_random_irregularities
+
+    def add_specific_irregularities(self, positions: list, n_grains: list):
+        """
+        :param positions:
+        :param n_grains:
+        :return:
+        """
+        self.piles[positions] += n_grains
+        #self.initial_number_of_grains += np.sum(n_grains)
+
 
     def add_grain(self, position: int, n_grains: int):
         self.piles[position] += n_grains
@@ -82,26 +110,26 @@ class Road:
             counter += 1
 
 
-def initialize_road(size: int, standard_height: int, nr_of_random_irregularities: int) -> np.ndarray:
-    """
-    Initializes a numpy array of a given length with a standard height and several small irregular bumps
-    :param size: size/length of road, i.e. positions
-    :param standard_height: level above zero
-    :param nr_of_random_irregularities: number of bumps (position is chosen randomly)
-    :return: road array
-    """
-    road = np.full(size, standard_height, dtype=np.int)
-    irregular_positions = np.random.randint(0, len(road), nr_of_random_irregularities)
-    road[irregular_positions] = [standard_height + 1] * nr_of_random_irregularities
-    return road
-
-
 def smoothing(road: np.ndarray) -> np.ndarray:
 
     pass
 
 
-def determine_bump_height(road: np.ndarray, position: int, wheel_size: int, method='max') -> int:
+
+def move_to_next_bump(road: Road, wheel: Wheel) -> int:
+    pos_count = wheel.xf
+    while (pos_count < road.size & road.piles[pos_count] <= road.piles[wheel.xf]):
+        pos_count += 1
+
+    if pos_count > road.size:
+            print("\nNo next bump found. move_to_next_bump() failed.\n")
+            sys.exit()
+    else:
+        wheel.set_xf( pos_count - 1 )
+
+    return pos_count
+
+def determine_bump_height(road: Road, wheel: Wheel, position: int,  method='max') -> int:
     """
     General bump height function, returns the bump height of a position on a road for a given
     wheel_size and method
@@ -119,14 +147,13 @@ def determine_bump_height(road: np.ndarray, position: int, wheel_size: int, meth
         print("The bump_height method '",  method  ,"' does not exist. Using default method '", default_method, "'")
         method = 'max'
 
-
     if method == 'max':
-        return max_bump_height(road, position, wheel_size)
+        return max_bump_height(road, wheel, position)
 
 
 
 
-def max_bump_height(road: np.ndarray, position: int, wheel_size: int) -> int:
+def max_bump_height(road: Road, wheel: Wheel, position: int) -> int:
     """
     At position i determine the bump height of the next w elements/indexes/positions
     with w being the wheel_size.
@@ -136,10 +163,9 @@ def max_bump_height(road: np.ndarray, position: int, wheel_size: int) -> int:
     :param wheel_size: int, width of the wheel
     :return: int, the bump height
     """
-    return np.max(road[ (position + 1) : (position + 1 + wheel_size) ])
+    return np.max(road.piles[ (position + 1) : (position + 1 + wheel.diameter) ]) - wheel.elevation
 
-
-def jump(from_position: int, bump_heigth: int, velocity: int, road_length: int) -> int:
+def jump(road: Road, wheel: Wheel, bump_height: int):
     """
     Returns the front position of the wheel after a jump
     :param from_position:
@@ -148,10 +174,11 @@ def jump(from_position: int, bump_heigth: int, velocity: int, road_length: int) 
     :param road_length:
     :return:
     """
-    return (from_position + velocity * bump_heigth) % road_length
+    #wheel.xf = (wheel.xf + wheel.velocity * bump_height) % road.size
+    wheel.update_position(wheel.velocity * bump_height)
+    wheel.set_elevation(road.piles[wheel.xf])
 
-
-def digging(road: np.ndarray, position: int, wheel_size: int, method='backwards') -> Tuple[np.ndarray, int]:
+def digging(road: Road,  wheel: Wheel, position: int, method='backwards'): # -> Tuple[np.ndarray, int]:
     """
     Returs the road after an digging event
     :param road:
@@ -161,10 +188,11 @@ def digging(road: np.ndarray, position: int, wheel_size: int, method='backwards'
     :return:
     """
     if method == 'backwards':
-        return dig_backwards(road, position, wheel_size)
+        return dig_backwards(road, wheel, position)
 
 
-def dig_backwards(road: np.ndarray, position: int, wheel_size: int) -> Tuple[np.ndarray, int]:
+
+def dig_backwards(road: Road, wheel: Wheel, position: int): # -> Tuple[np.ndarray, int]:
     """
     Returns the after a backwards digging event, i.e. all the sand is put back behind the wheel
     :param road:
@@ -172,24 +200,26 @@ def dig_backwards(road: np.ndarray, position: int, wheel_size: int) -> Tuple[np.
     :param wheel_size:
     :return:
     """
-    remove_from = np.mod(np.arange(position - wheel_size + 1, position + 1), len(road))
-    put_on = np.mod(np.arange(position - 2 * wheel_size + 1, position - wheel_size + 1), len(road))
-    road[remove_from] -= (road[remove_from] > 0).astype(int)
-    road[put_on] += (road[remove_from] > 0).astype(int)
-    return road, position + wheel_size
+    remove_from = np.mod(np.arange(position - wheel.diameter + 1, position + 1), road.size)
+    put_on = np.mod(np.arange(position - 2 * wheel.diameter + 1, position - wheel.diameter + 1), road.size)
+    road.piles[remove_from] -= (road.piles[remove_from] > 0).astype(int)
+    road.piles[put_on] += (road.piles[remove_from] > 0).astype(int)
+    #return position + wheel.diameter
 
 
-def print_road_surface(road: np.ndarray, wheel_pos=None, wheel_size=None):
+
+
+def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
     """
     Prints the road surface. So far without the wheel.
     :param road: np.ndarray with the height in each index/column/position
     :return:
     """
-    max_height = road.max() + 1
+    max_height = (road.piles).max() + 1
     current_height = max_height
     road_surface = []
     for i in range(max_height + 1):
-        for pos, height in enumerate(road):
+        for pos, height in enumerate(road.piles):
             if height >= current_height:
                 road_surface.append('.')
             else:
@@ -205,40 +235,47 @@ def print_road_surface(road: np.ndarray, wheel_pos=None, wheel_size=None):
     print(''.join(road_surface))
 
 
-def wheel_pass(road: np.ndarray, wheel_size: int, velocity: int, max_iterations: int, bump_method: str,
-               dig_method: str):
-    current_height = road[0]
-    pos = 1
-    iteration = 0
-    while iteration < max_iterations:
-        if road[pos] <= current_height:
-            current_height = road[pos]
-            pos += 1
-            if pos == len(road):
-                pos = 0
-                iteration += 1
-        else:
-            bump_height = determine_bump_height(road, pos, wheel_size, method=bump_method)
-            new_pos = jump(from_position=pos, bump_heigth=bump_height, velocity=velocity, road_length=len(road))
-            road, new_pos = digging(road, new_pos, wheel_size, method=dig_method)
-            if new_pos < pos:
-                iteration += 1
-            pos = new_pos
-        print_road_surface(road, pos, wheel_size)
 
+def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
+               dig_method: str):
+    iteration = 0
+    #bump_position = None
+    #bump_height = None
+
+    while iteration < max_iterations:
+        bump_position = move_to_next_bump(road, wheel)
+        bump_height = determine_bump_height(road, wheel, bump_position, method = bump_method)
+        jump(road, wheel, bump_height)
+        digging(road, wheel, wheel.xf, method = dig_method)
+        wheel.update_position(1)
+        wheel.set_elevation(road.piles[wheel.xf])
+        print_road_surface(road, wheel.xf, wheel.diameter)
+        iteration += 1
+        #end iteration
 
 def main():
-    iterations = 100
-    road_size = 183
+    iterations = 2
+    road_size = 10
     standard_height = 5
     nr_of_irregular_points = 5
     wheel_size = 4
     velocity = 5  # m/s
-    road = initialize_road(road_size, standard_height, nr_of_irregular_points)
-    print_road_surface(road)
-    wheel_pass(road, wheel_size, velocity, iterations, bump_method='max', dig_method='backwards')
-    pass
 
+    road = Road(road_size, standard_height, 'specific', list([4]), list([1]))
+    wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
+
+
+    #road = initialize_road(road_size, standard_height, nr_of_irregular_points)
+
+    #mystring = f'hello my velocity is {[1,2]}'
+
+    #print(5)
+    print_road_surface(road, wheel.xf, wheel.diameter)
+   # print(8)
+    #wheel_pass(road, wheel_size, velocity, iterations, bump_method='max', dig_method='backwards')
+    #sys.exit()
+    print("\n I have finished the main\n")
 
 if __name__ == '__main__':
     main()
+
