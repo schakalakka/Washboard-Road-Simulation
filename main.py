@@ -342,41 +342,32 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                          dig_method: str):
     """
+     This function performs a loop of wheel passes through a road until 'max_iterations'
+     wheel passes have been performed. The successive wheel passes modify the road surface.
 
-    :param road:
-    :param wheel:
-    :param max_iterations:
-    :param bump_method:
-    :param dig_method:
+    :param road: a Road
+    :param wheel: a Wheel
+    :param max_iterations: maximum number of wheel passes (iterations)
+    :param bump_method: str, method name for the 'determine_bump_height' function
+    :param dig_method: str, method name for the 'digging' function
     """
     while wheel.number_of_passes < max_iterations:
-        # passes = wheel.number_of_passes
         initial_position = wheel.xf
-        # print_road_surface(road, wheel.xf, wheel.diameter)
-        # elevation = wheel.elevation
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
-        # print(f'\nbump position = {bump_position}\n')
-        # print(f'\nbump height = {bump_height}\n')
-        # elevation = wheel.elevation
-
-        # print_road_surface(road, wheel.xf, wheel.diameter)
         jump(road, wheel, bump_height)
-        # elevation = wheel.elevation
 
-        # print_road_surface(road, wheel.xf, wheel.diameter)
         digging(road, wheel, wheel.xf, method=dig_method)
 
-        # print_road_surface(road, wheel.xf, wheel.diameter)
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
-        # elevation = wheel.elevation
 
         final_position = wheel.xf
         if final_position <= initial_position:
             wheel.number_of_passes += 1
+            print(f'\nIteration number {wheel.number_of_passes}')
+            print(f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             print_road_surface(road, wheel.xf, wheel.diameter)
-            print(f'number of grains is {road.get_number_of_grains()}')
 
 
 def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
@@ -420,27 +411,24 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
 
 def main():
-    iterations = 100
-    road_size = 100
-    standard_height = 5
-    nr_of_irregular_points = 5
-    wheel_size = 4
-    velocity = 1  # m/s
+    number_of_wheel_passes = 100 # number of 'vehicles' that pass through the road in the whole simulation
+    road_size = 100 # length of the road
+    standard_height = 5 # standard height or initial height of the road
+    nr_of_irregular_points = 5 # number of irregularities for the Road.add_random_irregularities function
+    wheel_size = 4 # (Initial) wheel diameter
+    velocity = 1  # Proportionality constant to jump (BETA)
 
+    # Initialization of a Road, road, and a Wheel, wheel.
     road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
-    # road = initialize_road(road_size, standard_height, nr_of_irregular_points)
-
-    # mystring = f'hello my velocity is {[1,2]}'
-
-    # print(5)
+    # Print the initial road-wheel configuration
     print_road_surface(road, wheel.xf, wheel.diameter)
-    # print(8)
-    wheel_pass(road, wheel, iterations, 'max', 'backwards')
-    # wheel_pass(road, wheel_size, velocity, iterations, bump_method='max', dig_method='backwards')
-    # sys.exit()
-    print("\n I have finished the main\n")
+
+    # Perform the wheel passes
+    wheel_pass(road, wheel, number_of_wheel_passes, 'max', 'backwards')
+
+    print("\nThe simulation has finished...\n")
 
 
 if __name__ == '__main__':
