@@ -340,6 +340,46 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
 
 
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
+                         dig_method: str):
+    """
+
+    :param road:
+    :param wheel:
+    :param max_iterations:
+    :param bump_method:
+    :param dig_method:
+    """
+    while wheel.number_of_passes < max_iterations:
+        # passes = wheel.number_of_passes
+        initial_position = wheel.xf
+        # print_road_surface(road, wheel.xf, wheel.diameter)
+        # elevation = wheel.elevation
+        bump_position = move_to_next_bump(road, wheel)
+        bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
+        # print(f'\nbump position = {bump_position}\n')
+        # print(f'\nbump height = {bump_height}\n')
+        # elevation = wheel.elevation
+
+        # print_road_surface(road, wheel.xf, wheel.diameter)
+        jump(road, wheel, bump_height)
+        # elevation = wheel.elevation
+
+        # print_road_surface(road, wheel.xf, wheel.diameter)
+        digging(road, wheel, wheel.xf, method=dig_method)
+
+        # print_road_surface(road, wheel.xf, wheel.diameter)
+        wheel.update_position(wheel.diameter)
+        wheel.set_elevation(road.piles[wheel.xf])
+        # elevation = wheel.elevation
+
+        final_position = wheel.xf
+        if final_position <= initial_position:
+            wheel.number_of_passes += 1
+            print_road_surface(road, wheel.xf, wheel.diameter)
+            print(f'number of grains is {road.get_number_of_grains()}')
+
+
+def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                dig_method: str):
     """
 
@@ -371,7 +411,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
         # elevation = wheel.elevation
-        
+
         final_position = wheel.xf
         if final_position <= initial_position:
             wheel.number_of_passes += 1
