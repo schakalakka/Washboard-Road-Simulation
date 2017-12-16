@@ -127,7 +127,7 @@ def move_to_next_bump(road: Road, wheel: Wheel) -> int:
     else:
         wheel.set_xf( pos_count - 1 )
 
-    return pos_count
+    return pos_count-1
 
 def determine_bump_height(road: Road, wheel: Wheel, position: int,  method='max') -> int:
     """
@@ -243,19 +243,31 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
     #bump_height = None
 
     while iteration < max_iterations:
+        print_road_surface(road, wheel.xf, wheel.diameter)
+        elevation = wheel.elevation
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method = bump_method)
+        #print(f'\nbump position = {bump_position}\n')
+        #print(f'\nbump height = {bump_height}\n')
+        elevation = wheel.elevation
+        print_road_surface(road, wheel.xf, wheel.diameter)
         jump(road, wheel, bump_height)
+        elevation = wheel.elevation
+
+        print_road_surface(road, wheel.xf, wheel.diameter)
         digging(road, wheel, wheel.xf, method = dig_method)
+
+        print_road_surface(road, wheel.xf, wheel.diameter)
         wheel.update_position(1)
         wheel.set_elevation(road.piles[wheel.xf])
+        elevation = wheel.elevation
         print_road_surface(road, wheel.xf, wheel.diameter)
         iteration += 1
         #end iteration
 
 def main():
-    iterations = 2
-    road_size = 10
+    iterations = 5
+    road_size = 100
     standard_height = 5
     nr_of_irregular_points = 5
     wheel_size = 4
@@ -272,6 +284,7 @@ def main():
     #print(5)
     print_road_surface(road, wheel.xf, wheel.diameter)
    # print(8)
+    wheel_pass(road, wheel, iterations, 'max', 'backwards')
     #wheel_pass(road, wheel_size, velocity, iterations, bump_method='max', dig_method='backwards')
     #sys.exit()
     print("\n I have finished the main\n")
