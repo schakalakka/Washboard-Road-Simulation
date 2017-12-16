@@ -211,8 +211,13 @@ def dig_backwards(road: Road, wheel: Wheel, position: int): # -> Tuple[np.ndarra
     """
     remove_from = np.mod(np.arange(position - wheel.diameter + 1, position + 1), road.size)
     put_on = np.mod(np.arange(position - 2 * wheel.diameter + 1, position - wheel.diameter + 1), road.size)
-    road.piles[remove_from] -= (road.piles[remove_from] > 0).astype(int)
-    road.piles[put_on] += (road.piles[remove_from] > 0).astype(int)
+    increments = (road.piles[remove_from] > 0).astype(int)
+    if len(remove_from) != len(put_on):
+        print("\nWe are going to remove or put more or less than put or remove grains\n")
+        sys.exit()
+
+    road.piles[remove_from] -= increments
+    road.piles[put_on] += increments
     #return position + wheel.diameter
 
 
@@ -279,7 +284,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         #end iteration
 
 def main():
-    iterations = 10
+    iterations = 100
     road_size = 100
     standard_height = 5
     nr_of_irregular_points = 5
