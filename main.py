@@ -15,6 +15,7 @@ class Wheel:
         self.elevation = elevation
         self.period = period
         self.velocity = velocity
+        self.number_of_passes = 0
 
     def get_diameter(self):
         return self.diameter
@@ -118,16 +119,20 @@ def smoothing(road: np.ndarray) -> np.ndarray:
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
     period = road.size
-    pos_count = wheel.xf % period
-    elevation = wheel.elevation
-    f = road.piles[pos_count]
-    statement = (pos_count < road.size) & (road.piles[pos_count % period] <= wheel.elevation)
-    while (road.piles[pos_count % period] <= wheel.elevation):
+    pos_count = wheel.xf
+    #elevation = wheel.elevation
+    #f = road.piles[pos_count % period]
+    #statement = (pos_count < road.size) & (road.piles[pos_count % period] <= wheel.elevation)
+    while (pos_count < 2*period) & (road.piles[pos_count % period] <= wheel.elevation):
         pos_count += 1
 
-    #if pos_count > road.size:
-          #  print("\nNo next bump found. move_to_next_bump() failed.\n")
-          #  sys.exit()
+    if pos_count > 2*period:
+           print("\nNo next bump found. move_to_next_bump() failed.\n")
+           sys.exit()
+
+    #if pos_count >= period:
+        #wheel.number_of_passes += 1
+
     bump_position = (pos_count % period) - 1
     wheel.set_xf( bump_position )
 
@@ -242,40 +247,44 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
 
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                dig_method: str):
-    iteration = 0
-    #bump_position = None
-    #bump_height = None
 
-    while iteration < max_iterations:
-        print_road_surface(road, wheel.xf, wheel.diameter)
-        elevation = wheel.elevation
+    while wheel.number_of_passes < max_iterations:
+        #passes = wheel.number_of_passes
+        initial_position = wheel.xf
+        #print_road_surface(road, wheel.xf, wheel.diameter)
+        #elevation = wheel.elevation
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method = bump_method)
         #print(f'\nbump position = {bump_position}\n')
         #print(f'\nbump height = {bump_height}\n')
         elevation = wheel.elevation
-        print_road_surface(road, wheel.xf, wheel.diameter)
+        #print_road_surface(road, wheel.xf, wheel.diameter)
         jump(road, wheel, bump_height)
-        elevation = wheel.elevation
+        #elevation = wheel.elevation
 
-        print_road_surface(road, wheel.xf, wheel.diameter)
+        #print_road_surface(road, wheel.xf, wheel.diameter)
         digging(road, wheel, wheel.xf, method = dig_method)
 
-        print_road_surface(road, wheel.xf, wheel.diameter)
+        #print_road_surface(road, wheel.xf, wheel.diameter)
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
-        elevation = wheel.elevation
+        #elevation = wheel.elevation
+        final_position = wheel.xf
+        if final_position <= initial_position:
+            wheel.number_of_passes += 1
+
         print_road_surface(road, wheel.xf, wheel.diameter)
-        iteration += 1
+        #if
+        #iteration += 1
         #end iteration
 
 def main():
-    iterations = 5
+    iterations = 10
     road_size = 100
     standard_height = 5
     nr_of_irregular_points = 5
     wheel_size = 4
-    velocity = 5  # m/s
+    velocity = 1  # m/s
 
     road = Road(road_size, standard_height, 'specific', list([4,40]), list([1,1]))
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
