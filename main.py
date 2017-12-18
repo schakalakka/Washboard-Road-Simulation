@@ -406,8 +406,10 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
         final_position = wheel.xf
         if final_position <= initial_position:
             wheel.number_of_passes += 1
+            print(f'\nIteration number {wheel.number_of_passes}')
+            print(
+                f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             print_road_surface(road, wheel.xf, wheel.diameter)
-            print(f'number of grains is {road.get_number_of_grains()}')
 
 
 def main():
