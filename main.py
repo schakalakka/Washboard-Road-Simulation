@@ -274,7 +274,7 @@ def jump(road: Road, wheel: Wheel, bump_height: int):
     :param bump_height: the height of the bump from which the wheel jumps
     :return: void
     """
-    wheel.update_position(wheel.velocity * bump_height)
+    wheel.update_position(wheel.velocity * bump_height + wheel.diameter)
     wheel.set_elevation(road.piles[wheel.xf])
 
 
@@ -391,7 +391,8 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
         # print(f'\nbump height = {bump_height}\n')
         #elevation = wheel.elevation
 
-        #print_road_surface(road, wheel.xf, wheel.diameter)
+        print_road_surface(road, wheel.xf, wheel.diameter)
+
         jump(road, wheel, bump_height)
         # elevation = wheel.elevation
 
@@ -415,12 +416,12 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 def main():
     debugging = True
 
-    number_of_wheel_passes = 100 # number of 'vehicles' that pass through the road in the whole simulation
+    number_of_wheel_passes = 1000 # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 100 # length of the road
     standard_height = 5 # standard height or initial height of the road
     nr_of_irregular_points = 20 # number of irregularities for the Road.add_random_irregularities function
     wheel_size = 4 # (Initial) wheel diameter
-    velocity = 1  # Proportionality constant to jump (BETA)
+    velocity = 2  # Proportionality constant to jump (BETA)
 
     # Initialization of a Road, road, and a Wheel, wheel.
     road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
