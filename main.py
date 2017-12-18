@@ -373,7 +373,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
 def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                dig_method: str):
     """
-
+    Put a red circle (for the debugger) in each print statement that is not hidden with a '#'
     :param road:
     :param wheel:
     :param max_iterations:
@@ -383,7 +383,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
     while wheel.number_of_passes < max_iterations:
         # passes = wheel.number_of_passes
         initial_position = wheel.xf
-        # print_road_surface(road, wheel.xf, wheel.diameter)
+        print_road_surface(road, wheel.xf, wheel.diameter)
         # elevation = wheel.elevation
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
@@ -391,14 +391,14 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
         # print(f'\nbump height = {bump_height}\n')
         #elevation = wheel.elevation
 
-        # print_road_surface(road, wheel.xf, wheel.diameter)
+        #print_road_surface(road, wheel.xf, wheel.diameter)
         jump(road, wheel, bump_height)
         # elevation = wheel.elevation
 
-        # print_road_surface(road, wheel.xf, wheel.diameter)
+        print_road_surface(road, wheel.xf, wheel.diameter)
         digging(road, wheel, wheel.xf, method=dig_method)
 
-        # print_road_surface(road, wheel.xf, wheel.diameter)
+        print_road_surface(road, wheel.xf, wheel.diameter)
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
         # elevation = wheel.elevation
@@ -409,10 +409,12 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
             print(f'\nIteration number {wheel.number_of_passes}')
             print(
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
-            print_road_surface(road, wheel.xf, wheel.diameter)
+            #print_road_surface(road, wheel.xf, wheel.diameter)
 
 
 def main():
+    debugging = True
+
     number_of_wheel_passes = 100 # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 100 # length of the road
     standard_height = 5 # standard height or initial height of the road
@@ -430,7 +432,11 @@ def main():
     print_road_surface(road, wheel.xf, wheel.diameter)
 
     # Perform the wheel passes
-    wheel_pass(road, wheel, number_of_wheel_passes, 'max', 'backwards')
+    if debugging == False:
+        wheel_pass(road, wheel, number_of_wheel_passes, 'max', 'backwards')
+    else:
+        wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', 'backwards')
+
 
     print("\nThe simulation has finished...\n")
 
