@@ -1,196 +1,13 @@
-import numpy as np
 # from typing import Tuple
 import sys
 
+import numpy as np
+
+from road import Road
+from wheel import Wheel
+
 
 # CLASSES
-
-class Wheel:
-    """
-    Object that represents a vehicle wheel
-    """
-
-    def __init__(self, diameter: int, right_position: int, elevation: int, velocity: int, period: int):
-        """
-         Initalisation function for the Wheel class.
-        :param diameter: diameter of the wheel.
-        :param right_position: position of the right most part of the wheel (from 0 to period-1).
-        :param elevation: wheel elevation with respect to the ground level of the road it is inside.
-        :param velocity: velocity of the wheel (BETA).
-        :param period: length of the road in which the wheel is.
-        """
-        self.diameter = diameter
-        self.xf = right_position % period
-        self.x0 = (self.xf - self.diameter + 1) % period  # Care, now it could be negative
-        self.elevation = elevation
-        self.period = period
-        self.velocity = velocity
-        self.number_of_passes = 0
-
-    def set_diameter(self, new_diameter: int):
-        """
-        Change the current diameter of the wheel to another value
-        :param new_diameter: new value of the wheel's diameter
-        """
-        if new_diameter <= 0:
-            print('Error: Wheel diameter can not be set to a negative number nor zero.')
-            sys.exit()
-        self.diameter = new_diameter
-
-    def set_elevation(self, new_elevation: int):
-        """
-         Change the current elevation of the wheel to another value
-        :param new_elevation: new value for the wheel's elevation
-        """
-        if new_elevation < 0:
-            print('Error: Wheel elevation can not be set to a negative number.')
-            sys.exit()
-        self.elevation = new_elevation
-
-    def set_velocity(self, new_velocity: int):
-        """
-        Change the current velocity of the wheel to another value
-        :param new_velocity: new value for the velocity
-        """
-        self.velocity = new_velocity
-
-    def set_xf(self, new_xf: int):
-        """
-        Change the right-most (xf) position of the wheel to another value. At the same time the left-most
-        part if the wheel (x0) is changed. PERIODIC CONDITIONS are applied.
-        :param new_xf:
-        """
-        if new_xf >= self.period or new_xf < 0:
-            print('Intent to set xf to a negative number or out of the road. Applying periodic', self.period,
-                  'conditions.')
-        self.xf = new_xf % self.period
-        self.x0 = (self.xf - self.diameter + 1) % self.period
-
-    def update_position(self, steps: int):
-        """
-        The position of the wheel is updated: incremented or decremented 'steps' times depending on the sign
-        of the parameter steps.
-        :param steps:
-        """
-        new_xf = self.xf + steps
-        self.set_xf(new_xf)
-
-    def update_velocity(self, steps: int):
-        """
-        The same as update_position but for the velocity
-        :param steps:
-        """
-        new_velocity = self.velocity + steps
-        self.set_velocity(new_velocity)
-
-    def update_elevation(self, steps: int):
-        """
-        The same as update_position but for the elevation
-        :param steps:
-        """
-        new_elevation = self.elevation + steps
-        self.set_elevation(new_elevation)
-
-    def update_diameter(self, steps: int):
-        """
-        The same as update_position but for the diameter
-        :param steps:
-        """
-        new_diameter = self.diameter + steps
-        self.set_diameter(new_diameter)
-
-
-class Road:
-    """
-    Object that represents a Road.
-    """
-
-    def __init__(self, size: int, standard_height: int, irregularities='random', positions=list([1]),
-                 n_grains=list([1])):
-        """
-        Initalisation function for the Road class.
-        :param size: the length of the road (number of piles or columns that form the road)
-        :param standard_height: the standard height, with respect to a 0 level, of the road.
-        :param irregularities: method to initialise irregularities for the road
-        :param positions: If the irregularities method requires it,
-                          it is the list of positions where the irregularities have to be added.
-        :param n_grains:  List containing the number of grains to be added in each position of
-                          the :positions: list.
-        """
-        # Each pile of the road is filled with :standard_height: grains of sand
-        # piles is an array with height at each position of the road
-        self.piles = np.full(size, standard_height, dtype=np.int)
-        self.size = size
-        self.height = standard_height
-
-        if irregularities == 'random':
-            self.add_random_irregularities(n_grains[0])
-        elif irregularities == 'specific':
-            self.add_specific_irregularities(positions, n_grains)
-
-        # Store the number of initial grains (the total number of sand grains) that the road contains.
-        self.initial_number_of_grains = self.get_number_of_grains()
-
-    def get_number_of_grains(self) -> int:
-        """
-        :return: the number of current sand grains that the road contains
-        """
-        return np.sum(self.piles)
-
-    def add_random_irregularities(self, nr_of_random_irregularities: int):
-        """
-        @TODO
-        :param nr_of_random_irregularities: @TODO
-        """
-        irregular_positions = np.random.randint(0, len(self.piles), nr_of_random_irregularities)
-        self.piles[irregular_positions] = [self.height + 1] * nr_of_random_irregularities
-
-    def add_specific_irregularities(self, positions: list, n_grains: list):
-        """
-        :param positions: positions or pile numbers of the road where to add extra grains
-        :param n_grains: numbers of grains to add in each position
-        :return:
-        """
-        self.piles[positions] += n_grains
-
-    def add_grain(self, position: int, n_grains: int):
-        """
-        @SO FAR NOT USED
-        :param position:
-        :param n_grains:
-        """
-        self.piles[position] += n_grains
-
-    def remove_grain(self, position: int, n_grains: int):
-        """
-        @SO FAR NOT USED
-        :param position:
-        :param n_grains:
-        """
-        self.piles[position] -= n_grains
-
-    def add_grains(self, positions: list, n_grains: list):
-        """
-        @ SO FAR NOT USED
-        :param positions:
-        :param n_grains:
-        """
-        counter = 0
-        for position in positions:
-            self.add_grain(self, positions[position], n_grains[counter])
-            counter += 1
-
-    def remove_grains(self, positions: list, n_grains: list):
-        """
-        @ SO FAR NOT USED
-        :param positions:
-        :param n_grains:
-        """
-        counter = 0
-        for position in positions:
-            self.remove_grain(self, positions[position], n_grains[counter])
-            counter += 1
-
 
 def smoothing(road: Road):
     """
@@ -317,9 +134,11 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
     Prints the road surface. It also prints the lower part of the wheel if  wheel_pos != None
     and wheel_size != None (both conditions at the same time)
     :param road: a Road
+    :param wheel_pos:
+    :param wheel_size:
     :return: prints the road with or without the wheel as standard output.
     """
-    max_height = (road.piles).max() + 1
+    max_height = road.piles.max() + 1
     current_height = max_height
     road_surface = []
     for i in range(max_height + 1):
@@ -339,8 +158,7 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
     print(''.join(road_surface))
 
 
-def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
-                         dig_method: str):
+def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, dig_method: str):
     """
      This function performs a loop of wheel passes through a road until 'max_iterations'
      wheel passes have been performed. The successive wheel passes modify the road surface.
@@ -366,12 +184,13 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         if final_position <= initial_position:
             wheel.number_of_passes += 1
             print(f'\nIteration number {wheel.number_of_passes}')
-            print(f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
+            print(
+                f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             print_road_surface(road, wheel.xf, wheel.diameter)
 
 
 def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
-               dig_method: str):
+                         dig_method: str):
     """
     Put a red circle (for the debugger) in each print statement that is not hidden with a '#'
     :param road:
@@ -389,7 +208,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
         # print(f'\nbump position = {bump_position}\n')
         # print(f'\nbump height = {bump_height}\n')
-        #elevation = wheel.elevation
+        # elevation = wheel.elevation
 
         print_road_surface(road, wheel.xf, wheel.diameter)
 
@@ -410,21 +229,21 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
             print(f'\nIteration number {wheel.number_of_passes}')
             print(
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
-            #print_road_surface(road, wheel.xf, wheel.diameter)
+            # print_road_surface(road, wheel.xf, wheel.diameter)
 
 
 def main():
-    debugging = True #True
+    debugging = True  # True
 
-    number_of_wheel_passes = 1000 # number of 'vehicles' that pass through the road in the whole simulation
-    road_size = 150 # length of the road
-    standard_height = 5 # standard height or initial height of the road
+    number_of_wheel_passes = 1000  # number of 'vehicles' that pass through the road in the whole simulation
+    road_size = 150  # length of the road
+    standard_height = 5  # standard height or initial height of the road
     nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
-    wheel_size = 6 # (Initial) wheel diameter
+    wheel_size = 6  # (Initial) wheel diameter
     velocity = 2  # Proportionality constant to jump (BETA)
 
     # Initialization of a Road, road, and a Wheel, wheel.
-    #road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
+    # road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
     road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
 
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
@@ -433,11 +252,10 @@ def main():
     print_road_surface(road, wheel.xf, wheel.diameter)
 
     # Perform the wheel passes
-    if debugging == False:
+    if debugging is False:
         wheel_pass(road, wheel, number_of_wheel_passes, 'max', 'backwards')
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', 'backwards')
-
 
     print("\nThe simulation has finished...\n")
 

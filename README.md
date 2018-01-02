@@ -6,7 +6,7 @@ Discrete washboard road simulation.
 
 * Spyridoula C. S., chrysikopoulou.spyridoula@gmail.com
 * Cristian Estany B., cresbabellpuig@gmail.com
-* Andreas Radke, (put e-mail here)
+* Andreas Radke, radkeandreas _a_t_ gmail.com
 * Dani Salgado. R. daniel.salgado@e-campus.uab.cat
 
 ## Abstract
