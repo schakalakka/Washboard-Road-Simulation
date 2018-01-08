@@ -7,7 +7,6 @@ from road import Road
 from wheel import Wheel
 
 
-# CLASSES
 
 def smoothing(road: Road):
     """
