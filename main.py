@@ -2,6 +2,7 @@
 import sys
 
 import numpy as np
+import pickle
 
 from road import Road
 from wheel import Wheel
@@ -230,11 +231,22 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             # print_road_surface(road, wheel.xf, wheel.diameter)
 
+def save_road(road: Road, output_filename: str):
+    with open(output_filename, 'wb') as output:
+        pickle.dump(road, output, pickle.HIGHEST_PROTOCOL)
+
+def read_road(input_filename: str):
+    with open(input_filename, 'rb') as input:
+        road = pickle.load(input)
+    return(road)
+
+
+
 
 def main():
-    debugging = True  # True
+    debugging = False  # True
 
-    number_of_wheel_passes = 1000  # number of 'vehicles' that pass through the road in the whole simulation
+    number_of_wheel_passes = 100  # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 150  # length of the road
     standard_height = 5  # standard height or initial height of the road
     nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
@@ -256,7 +268,14 @@ def main():
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', 'backwards')
 
+    save_road(road, 'test_road1.pkl')
+
     print("\nThe simulation has finished...\n")
+
+
+    road_read = read_road('test_road1.pkl')
+
+    print(road_read.piles)
 
 
 if __name__ == '__main__':
