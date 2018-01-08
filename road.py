@@ -32,6 +32,12 @@ class Road:
         # Store the number of initial grains (the total number of sand grains) that the road contains.
         self.initial_number_of_grains = self.get_number_of_grains()
 
+    def __getitem__(self, item: int):
+        return self.piles[item]
+
+    def __setitem__(self, key: int, value: int):
+        self.piles[key] = value
+
     def get_number_of_grains(self) -> int:
         """
         :return: the number of current sand grains that the road contains
@@ -54,7 +60,7 @@ class Road:
         """
         self.piles[positions] += n_grains
 
-    def add_grain(self, position: int, n_grains: int):
+    def add_grain(self, position: int, n_grains=1):
         """
         @SO FAR NOT USED
         :param position:
@@ -62,7 +68,7 @@ class Road:
         """
         self.piles[position] += n_grains
 
-    def remove_grain(self, position: int, n_grains: int):
+    def remove_grain(self, position: int, n_grains=1):
         """
         @SO FAR NOT USED
         :param position:

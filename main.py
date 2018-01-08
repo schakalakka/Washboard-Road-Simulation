@@ -5,7 +5,7 @@ import numpy as np
 
 from road import Road
 from wheel import Wheel
-
+from smoothing import *
 
 
 def smoothing(road: Road):
@@ -14,7 +14,7 @@ def smoothing(road: Road):
     :param road:
     :return:
     """
-    pass
+    slope_smoothing(road)
 
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
@@ -168,7 +168,11 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, 
     :param bump_method: str, method name for the 'determine_bump_height' function
     :param dig_method: str, method name for the 'digging' function
     """
+    current_passes = 0
     while wheel.number_of_passes < max_iterations:
+        if current_passes < wheel.number_of_passes:
+            smoothing(road)
+            current_passes = wheel.number_of_passes
         initial_position = wheel.xf
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
@@ -232,7 +236,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
 
 def main():
-    debugging = True  # True
+    debugging = False  # True
 
     number_of_wheel_passes = 1000  # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 150  # length of the road
