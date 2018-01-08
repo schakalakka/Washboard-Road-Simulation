@@ -6,7 +6,7 @@ import pickle
 
 from road import Road
 from wheel import Wheel
-
+from smoothing import *
 
 
 def smoothing(road: Road):
@@ -15,7 +15,7 @@ def smoothing(road: Road):
     :param road:
     :return:
     """
-    pass
+    slope_smoothing(road)
 
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
@@ -169,7 +169,11 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, 
     :param bump_method: str, method name for the 'determine_bump_height' function
     :param dig_method: str, method name for the 'digging' function
     """
+    current_passes = 0
     while wheel.number_of_passes < max_iterations:
+        if current_passes < wheel.number_of_passes:
+            smoothing(road)
+            current_passes = wheel.number_of_passes
         initial_position = wheel.xf
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
