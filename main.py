@@ -275,14 +275,14 @@ def main():
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', 'backwards')
 
-    save_road(road, 'test_road1.pkl')
+    #save_road(road, 'test_road1.pkl')
 
     print("\nThe simulation has finished...\n")
 
 
-    road_read = read_road('test_road1.pkl')
+    #road_read = read_road('test_road1.pkl')
 
-    print(road_read.piles)
+   #print(road_read.piles)
 
 
 if __name__ == '__main__':
