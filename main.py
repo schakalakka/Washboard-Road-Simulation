@@ -84,7 +84,12 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
 def main():
 
-    debugging = True  # True
+    #######################################################
+    #            SIMULATION PARAMETERS AND CONSTANTS      #
+    #######################################################
+    # @Andreas, you said something like to put this in a separate file?
+
+    debugging = False  # True
 
     number_of_wheel_passes = 200  # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 100  # length of the road
@@ -93,13 +98,19 @@ def main():
     wheel_size = 6  # (Initial) wheel diameter
     velocity = 5  # Proportionality constant to jump (BETA) 2
 
-    # Initialization of a Road, road, and a Wheel, wheel.
+
+    #######################################################
+    # Initialization of a Road, road, and a Wheel, wheel. #
+    #######################################################
+
     #road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
     #random.seed(2)
     road =Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
-    # Dig method
+    #########################################################
+    #                 DIGGING METHOD                        #
+    #########################################################
     dig_method = 'backwards tailed exponential'
     constant_probability = 1
     h0 = road.height
@@ -115,6 +126,16 @@ def main():
         print('The digging method name is not valid')
         sys.exit()
 
+    ###########################################################
+    #                 SMOOTHING METHOD                        #
+    ###########################################################
+     ##to do
+
+
+
+    #############################################################
+    #                 SIMULATION BODY                           #
+    #############################################################
 
     # Print the initial road-wheel configuration
     print_road_surface(road, wheel.xf, wheel.diameter)
@@ -123,16 +144,15 @@ def main():
         wheel_pass(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
+    print("\nThe simulation has finished...\n")
 
-
+    ##############################################################
+    #         SAVE ROAD IN FILE AND PLOTS                        #
+    ##############################################################
     #save_road(road, 'test_road1.pkl')
-
     print_road_surface(road, wheel.xf, wheel.diameter)
 
-    print("\nThe simulation has finished...\n")
-    #road_read = read_road('test_road1.pkl')
 
-   #print(road_read.piles)
     plot_road(road)
 
 
