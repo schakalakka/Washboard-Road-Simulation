@@ -1,14 +1,14 @@
 # from typing import Tuple
-import sys
 
-import numpy as np
-import pickle
-import random
 from road import Road
 from wheel import Wheel
-from smoothing import *
+import numpy as np
+import sys
+
 from digging import *
-import matplotlib.pyplot as plt
+from smoothing import *
+from utils import *
+
 
 def smoothing(road: Road, wheel: Wheel, iterations=1):
     """
@@ -27,36 +27,6 @@ def smoothing(road: Road, wheel: Wheel, iterations=1):
     #max_smoothing(road, (road.height+2) )
 
     #print_road_surface(road, wheel.xf, wheel.diameter)
-
-
-def move_to_next_bump(road: Road, wheel: Wheel) -> int:
-    """
-    Given a Road road and a Wheel wheel, this function moves the wheel to the position
-    that is just before the next road-bump that the wheel will find.
-    :param road: a Road
-    :param wheel: a Wheel
-    :return: the position (the number of the pile) that is just before the next bump that the wheel will find.
-    """
-    period = road.size
-    pos_count = wheel.xf
-
-    while (pos_count < 2 * period) & (road.piles[pos_count % period] <= wheel.elevation):
-        wheel.set_elevation(road.piles[pos_count % period])
-        pos_count += 1
-
-    if pos_count > 2 * period:
-        print("\nNo next bump found. move_to_next_bump() failed. ",
-              "\nThere are no bumps according to the current criteria\n")
-        sys.exit()
-
-    # The position that is just before the 'real' bump position is stored in the bump_position variable
-    bump_position = (pos_count % period) - 1
-
-    # Update the wheel's position
-    wheel.set_xf(bump_position)
-    #wheel.set_elevation(road.piles[wheel.xf])
-
-    return bump_position
 
 
 def determine_bump_height(road: Road, wheel: Wheel, position: int, method='max') -> int:
@@ -96,6 +66,37 @@ def max_bump_height(road: Road, wheel: Wheel, position: int) -> int:
     return np.max(road.piles[(position + 1): (position + 1 + wheel.diameter)]) - wheel.elevation
 
 
+####wheel
+def move_to_next_bump(road: Road, wheel: Wheel) -> int:
+    """
+    Given a Road road and a Wheel wheel, this function moves the wheel to the position
+    that is just before the next road-bump that the wheel will find.
+    :param road: a Road
+    :param wheel: a Wheel
+    :return: the position (the number of the pile) that is just before the next bump that the wheel will find.
+    """
+    period = road.size
+    pos_count = wheel.xf
+
+    while (pos_count < 2 * period) & (road.piles[pos_count % period] <= wheel.elevation):
+        wheel.set_elevation(road.piles[pos_count % period])
+        pos_count += 1
+
+    if pos_count > 2 * period:
+        print("\nNo next bump found. move_to_next_bump() failed. ",
+              "\nThere are no bumps according to the current criteria\n")
+        sys.exit()
+
+    # The position that is just before the 'real' bump position is stored in the bump_position variable
+    bump_position = (pos_count % period) - 1
+
+    # Update the wheel's position
+    wheel.set_xf(bump_position)
+    # wheel.set_elevation(road.piles[wheel.xf])
+
+    return bump_position
+
+
 def jump(road: Road, wheel: Wheel, bump_height: int):
     """
     Updates the wheel's position and elevation before it jumps.
@@ -108,34 +109,6 @@ def jump(road: Road, wheel: Wheel, bump_height: int):
     wheel.set_elevation(road.piles[wheel.xf])
 
 
-
-def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
-    """
-    Prints the road surface. It also prints the lower part of the wheel if  wheel_pos != None
-    and wheel_size != None (both conditions at the same time)
-    :param road: a Road
-    :param wheel_pos:
-    :param wheel_size:
-    :return: prints the road with or without the wheel as standard output.
-    """
-    max_height = road.piles.max() + 1
-    current_height = max_height
-    road_surface = []
-    for i in range(max_height + 1):
-        for pos, height in enumerate(road.piles):
-            if height >= current_height:
-                road_surface.append('.')
-            else:
-                if (wheel_pos is not None) & (wheel_size is not None):
-                    if wheel_pos - wheel_size < pos <= wheel_pos and height == current_height - 1:
-                        road_surface.append('w')
-                    else:
-                        road_surface.append(' ')
-                else:
-                    road_surface.append(' ')
-        current_height -= 1
-        road_surface.append('\n')
-    print(''.join(road_surface))
 
 
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, dig_method: str, dig_probability_arguments: list):
@@ -262,39 +235,15 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             # print_road_surface(road, wheel.xf, wheel.diameter)
 
-def save_road(road: Road, output_filename: str):
-    with open(output_filename, 'wb') as output:
-        pickle.dump(road, output, pickle.HIGHEST_PROTOCOL)
-
-def read_road(input_filename: str):
-    with open(input_filename, 'rb') as input:
-        road = pickle.load(input)
-    return(road)
-
-def plot_road(road: Road):
-    plt.plot(road.piles)
-    plt.xlabel('Distance (block size units)')
-    plt.ylabel('Surface height (block size units)')
-    plt.title('Road surface profile')
-    plt.grid(True)
-
-    #plt.axes().set_aspect('equal', 'datalim')
-    xmin = 0
-    xmax = road.size
-    ymin = 0-5
-    ymax = max(road.piles)+10
-    plt.axis([xmin, xmax, ymin, ymax])
-    plt.axes().set_aspect('equal', 'box')
-
-    plt.show()
 
 
 
 def main():
+
     debugging = False  # True
 
     number_of_wheel_passes = 200  # number of 'vehicles' that pass through the road in the whole simulation
-    road_size = 500  # length of the road
+    road_size = 100  # length of the road
     standard_height = 10  # standard height or initial height of the road
     nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
     wheel_size = 6  # (Initial) wheel diameter
