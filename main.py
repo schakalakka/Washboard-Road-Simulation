@@ -6,17 +6,20 @@ import pickle
 
 from road import Road
 from wheel import Wheel
+from smoothing import *
 
 
-
-def smoothing(road: Road):
+def smoothing(road: Road, iterations=1):
     """
     @TO DO
+    :param iterations:
     :param road:
     :return:
     """
-    pass
-
+    #for i in range(iterations):
+         #slope_smoothing(road)
+    for i in range(iterations):
+         max_smoothing(road)
 
 def move_to_next_bump(road: Road, wheel: Wheel) -> int:
     """
@@ -169,7 +172,11 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, 
     :param bump_method: str, method name for the 'determine_bump_height' function
     :param dig_method: str, method name for the 'digging' function
     """
+    current_passes = 0
     while wheel.number_of_passes < max_iterations:
+        if current_passes < wheel.number_of_passes:
+            smoothing(road,5)
+            current_passes = wheel.number_of_passes
         initial_position = wheel.xf
         bump_position = move_to_next_bump(road, wheel)
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
@@ -182,6 +189,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, 
 
         final_position = wheel.xf
         if final_position <= initial_position:
+            smoothing(road,5)
             wheel.number_of_passes += 1
             print(f'\nIteration number {wheel.number_of_passes}')
             print(
@@ -246,12 +254,12 @@ def read_road(input_filename: str):
 def main():
     debugging = False  # True
 
-    number_of_wheel_passes = 100  # number of 'vehicles' that pass through the road in the whole simulation
+    number_of_wheel_passes = 500  # number of 'vehicles' that pass through the road in the whole simulation
     road_size = 150  # length of the road
     standard_height = 5  # standard height or initial height of the road
     nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
     wheel_size = 6  # (Initial) wheel diameter
-    velocity = 2  # Proportionality constant to jump (BETA)
+    velocity = 2  # Proportionality constant to jump (BETA) 2
 
     # Initialization of a Road, road, and a Wheel, wheel.
     # road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
@@ -268,14 +276,14 @@ def main():
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', 'backwards')
 
-    save_road(road, 'test_road1.pkl')
+    #save_road(road, 'test_road1.pkl')
 
     print("\nThe simulation has finished...\n")
 
 
-    road_read = read_road('test_road1.pkl')
+    #road_read = read_road('test_road1.pkl')
 
-    print(road_read.piles)
+   #print(road_read.piles)
 
 
 if __name__ == '__main__':
