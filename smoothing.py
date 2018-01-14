@@ -3,8 +3,34 @@ import numpy as np
 from road import Road
 
 
-def max_smoothing(road: Road):
-    pass
+def max_smoothing(road: Road, maxh: int):
+    #maxh = 7
+    while max(road) > maxh:
+        for i in range(road.size):
+            if road[i] > maxh:
+                for n in range(1, road.size):
+                    right = (i + n) % road.size
+                    left = (i - n) % road.size
+                    rightr = road[right]
+                    leftr = road[left]
+                    if rightr < leftr and rightr < maxh:
+                        road.add_grain(right)
+                        road.remove_grain(i)
+                        break
+                    elif rightr > leftr and leftr < maxh:
+                        road.add_grain(left)
+                        road.remove_grain(i)
+                        break
+                    elif rightr == leftr and rightr < maxh:
+                        uniran = np.random.uniform(0, 1)
+                        if uniran >= 0.5:
+                            road.add_grain(right)
+                            road.remove_grain(i)
+                            break
+                        else:
+                            road.add_grain(left)
+                            road.remove_grain(i)
+                            break
 
 
 def slope_smoothing(road: Road):
