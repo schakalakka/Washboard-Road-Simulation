@@ -1,5 +1,5 @@
 import sys
-
+from road import Road
 
 class Wheel:
     """
@@ -94,3 +94,44 @@ class Wheel:
         """
         new_diameter = self.diameter + steps
         self.set_diameter(new_diameter)
+
+    def move_to_next_bump(self, road: Road) -> int:
+        """
+        Given a Road road and a Wheel wheel, this function moves the wheel to the position
+        that is just before the next road-bump that the wheel will find.
+        :param road: a Road
+        :param wheel: a Wheel
+        :return: the position (the number of the pile) that is just before the next bump that the wheel will find.
+        """
+        period = road.size
+        pos_count = self.xf
+
+        while (pos_count < 2 * period) & (road.piles[pos_count % period] <= self.elevation):
+            self.set_elevation(road.piles[pos_count % period])
+            pos_count += 1
+
+        if pos_count > 2 * period:
+            print("\nNo next bump found. move_to_next_bump() failed. ",
+                  "\nThere are no bumps according to the current criteria\n")
+            sys.exit()
+
+        # The position that is just before the 'real' bump position is stored in the bump_position variable
+        bump_position = (pos_count % period) - 1
+
+        # Update the wheel's position
+        self.set_xf(bump_position)
+        # wheel.set_elevation(road.piles[wheel.xf])
+
+        return bump_position
+
+    def jump(self, road: Road, bump_height: int):
+        """
+        Updates the wheel's position and elevation before it jumps.
+        :param road:
+        :param wheel:
+        :param bump_height: the height of the bump from which the wheel jumps
+        :return: void
+        """
+        self.update_position(self.velocity * bump_height + self.diameter)
+        self.set_elevation(road.piles[self.xf])
+

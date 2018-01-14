@@ -1,5 +1,4 @@
-from main import *
-
+from road import Road
 import pickle
 import matplotlib.pyplot as plt
 
