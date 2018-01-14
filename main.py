@@ -10,24 +10,6 @@ from smoothing import *
 from utils import *
 
 
-def smoothing(road: Road, wheel: Wheel, iterations=1):
-    """
-    @TO DO
-    :param iterations:
-    :param road:
-    :return:
-    """
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-
-    max_smoothing(road, (road.height+5) )
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-
-    for i in range(iterations):
-         slope_smoothing(road)
-    #max_smoothing(road, (road.height+2) )
-
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-
 
 def determine_bump_height(road: Road, wheel: Wheel, position: int, method='max') -> int:
     """

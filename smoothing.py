@@ -1,7 +1,7 @@
 import numpy as np
 
 from road import Road
-
+from wheel import Wheel
 
 def max_smoothing(road: Road, maxh: int):
     #maxh = 7
@@ -46,6 +46,37 @@ def slope_smoothing(road: Road):
             road.add_grain(i)
             road.remove_grain(i2)
 
+
+def smoothing(road: Road, wheel: Wheel, iterations=1):
+    """
+    @TO DO THE SAME FORMAT AS digging.py, this would be the general function and then we
+    can consider sub-smoothing procedures. This one would be one procedure, for example --->
+    :param iterations:
+    :param road:
+    :return:
+    """
+    #print_road_surface(road, wheel.xf, wheel.diameter)
+
+    max_smoothing(road, (road.height+5) )
+    #print_road_surface(road, wheel.xf, wheel.diameter)
+
+    for i in range(iterations):
+         slope_smoothing(road)
+    #max_smoothing(road, (road.height+2) )
+    #print_road_surface(road, wheel.xf, wheel.diameter)
+
+
+
+
+
+
+
+
+
+
+
+
+######not working yet
 def cellular_automata_smoothing(road: Road, iterations: int,
                                 D: float, gamma: float,
                                 v: float, S_c: int, d: int ):
