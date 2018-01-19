@@ -129,8 +129,19 @@ def main():
     ###########################################################
     #                 SMOOTHING METHOD                        #
     ###########################################################
-     ##to do
+     ##todo
 
+     #1) deterministic wind (global) smoothing function
+       # given a maximum height threshold put all the grains above that
+       # to the positions with lowest height
+
+      #1.2) RANDOM wind (global) smoothing function
+       # given a maximum height threshold put all the grains above that
+       # to the  RANDOM positions
+
+     #2) a generalized slope smoothing function:
+
+     #3) Organize smoothing.py as in digging.py
 
 
     #############################################################

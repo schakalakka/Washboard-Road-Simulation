@@ -3,6 +3,8 @@ import numpy as np
 from road import Road
 from wheel import Wheel
 
+
+
 def max_smoothing(road: Road, maxh: int):
     #maxh = 7
     while max(road) > maxh:
@@ -47,6 +49,9 @@ def slope_smoothing(road: Road):
             road.remove_grain(i2)
 
 
+
+
+
 def smoothing(road: Road, wheel: Wheel, iterations=1):
     """
     @TO DO THE SAME FORMAT AS digging.py, this would be the general function and then we
@@ -60,8 +65,8 @@ def smoothing(road: Road, wheel: Wheel, iterations=1):
     max_smoothing(road, (road.height+5) )
     #print_road_surface(road, wheel.xf, wheel.diameter)
 
-    for i in range(iterations):
-         slope_smoothing(road)
+   # for i in range(iterations):
+   #      slope_smoothing(road)
     #max_smoothing(road, (road.height+2) )
     #print_road_surface(road, wheel.xf, wheel.diameter)
 
