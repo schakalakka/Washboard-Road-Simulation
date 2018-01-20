@@ -3,7 +3,16 @@ import numpy as np
 from road import Road
 from wheel import Wheel
 
-
+def wind_smoothing(road: Road, maxh: int):
+    while max(road) > maxh:
+        for i in range(road.size):
+            if road[i] > maxh:
+                temp_minimum=min(road)
+                for j in range(road.size):
+                    if road[j] == temp_minimum:
+                        road.remove_grain(i)
+                        road.add_grain(j)
+                        break
 
 def max_smoothing(road: Road, maxh: int):
     #maxh = 7
