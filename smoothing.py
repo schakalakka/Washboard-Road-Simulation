@@ -2,7 +2,10 @@ import numpy as np
 
 from road import Road
 from wheel import Wheel
+from utils import print_road_surface
+import random
 
+#Idea: pass as maxh the current maximum height of the road
 def wind_smoothing(road: Road, maxh: int):
     while max(road) > maxh:
         for i in range(road.size):
@@ -13,6 +16,19 @@ def wind_smoothing(road: Road, maxh: int):
                         road.remove_grain(i)
                         road.add_grain(j)
                         break
+
+def random_wind_smoothing(road: Road, maxh: int):
+    while max(road) > maxh:
+        for i in range(road.size):
+            if road[i] > maxh:
+                temp_minimum=min(road)
+                temp_minimum_indices = np.where(road.piles == temp_minimum)
+                chosen_index = np.random.choice(temp_minimum_indices[0])
+                print(f'chosen index: {chosen_index}, remove from index: {i} ')
+                print(f'{road.piles}')
+                road.remove_grain(i)
+                road.add_grain(chosen_index)
+
 
 def max_smoothing(road: Road, maxh: int):
     #maxh = 7
@@ -69,16 +85,18 @@ def smoothing(road: Road, wheel: Wheel, iterations=1):
     :param road:
     :return:
     """
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-
-    max_smoothing(road, (road.height+5) )
+    print("Before doing smoothing")
+    print_road_surface(road, wheel.xf, wheel.diameter)
+    #max_smoothing(road, (road.height+5) )
     #print_road_surface(road, wheel.xf, wheel.diameter)
 
    # for i in range(iterations):
    #      slope_smoothing(road)
     #max_smoothing(road, (road.height+2) )
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-
+    random_wind_smoothing(road, (road.height+2) )
+    print("after doing smoothing")
+    print_road_surface(road, wheel.xf, wheel.diameter)
+    print("end smoothing iter")
 
 
 

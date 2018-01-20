@@ -92,7 +92,7 @@ def main():
     debugging = False  # True
 
     number_of_wheel_passes = 200  # number of 'vehicles' that pass through the road in the whole simulation
-    road_size = 100  # length of the road
+    road_size = 20  # length of the road
     standard_height = 10  # standard height or initial height of the road
     nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
     wheel_size = 6  # (Initial) wheel diameter
