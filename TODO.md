@@ -13,11 +13,12 @@
 
 - [ ] Comment functions and so (not prioritary, first the above things) 
 
+- [ ] More smoothing strategies
+
+- [ ] 2) A generalized slope smoothing function, if we have time or we can see what was the Andrea's idea but that the code failed.
+
+# TODO list for results / studies
 - [ ] Do a procedure to, starting with a same initial road profile, do the simulation a certain number of times and then plot the AVERAGE
 road profile by using the profile of all those iterations.7
 
 - [ ] Do a function or similar that given a filename and a road prints a Image into a file (png, eps)
-
-- [ ] 2) A generalized slope smoothing function, if we have time or we can see what was the Andrea's idea but that the code failed.
-
-
