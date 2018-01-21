@@ -8,7 +8,7 @@ class Wheel:
 
     def __init__(self, diameter: int, right_position: int, elevation: int, velocity: int, period: int):
         """
-         Initalisation function for the Wheel class.
+        Initalisation function for the Wheel class.
         :param diameter: diameter of the wheel.
         :param right_position: position of the right most part of the wheel (from 0 to period-1).
         :param elevation: wheel elevation with respect to the ground level of the road it is inside.
@@ -127,10 +127,9 @@ class Wheel:
     def jump(self, road: Road, bump_height: int):
         """
         Updates the wheel's position and elevation before it jumps.
-        :param road:
-        :param wheel:
+        :param road: Road class instance
         :param bump_height: the height of the bump from which the wheel jumps
-        :return: void
+        :return:
         """
         self.update_position(self.velocity * bump_height + self.diameter)
         self.set_elevation(road.piles[self.xf])

@@ -2,27 +2,43 @@ import numpy as np
 
 from road import Road
 from wheel import Wheel
-from utils import print_road_surface
-import random
 import sys
 
-#Idea: pass as maxh the current maximum height of the road
+
+# Idea: pass as maxh the current maximum height of the road
 def wind_smoothing(road: Road, maxh: int):
+    """
+    Global max/wind smoothing function.
+    Takes all the grains above a threshold maxh and puts them to the lowest heights (globally).
+    This methods puts the grains to the first position with the lowest height.
+    :param road: Road class instance
+    :param maxh: positive integer, threshold value, above this value all grains are removed
+    :return:
+    """
     while max(road) > maxh:
         for i in range(road.size):
             if road[i] > maxh:
-                temp_minimum=min(road)
+                temp_minimum = min(road)
                 for j in range(road.size):
                     if road[j] == temp_minimum:
                         road.remove_grain(i)
                         road.add_grain(j)
                         break
 
+
 def random_wind_smoothing(road: Road, maxh: int):
+    """
+    Global max/wind smoothing function similar to wind_smoothing.
+    The difference is that the grains are randomly distributed over all lowest positions with the lowest height
+    and not to the first position in the road with the lowest height.
+    :param road: Road class instance
+    :param maxh: positive integer, threshold value, above this value all grains are removed
+    :return:
+    """
     while max(road) > maxh:
         for i in range(road.size):
             if road[i] > maxh:
-                temp_minimum=min(road)
+                temp_minimum = min(road)
                 temp_minimum_indices = np.where(road.piles == temp_minimum)
                 chosen_index = np.random.choice(temp_minimum_indices[0])
                 road.remove_grain(i)
@@ -30,7 +46,14 @@ def random_wind_smoothing(road: Road, maxh: int):
 
 
 def max_smoothing(road: Road, maxh: int):
-    #maxh = 7
+    """
+    Local max smoothing method. Takes all the grains above a certain threshold and puts them onto
+    neighbouring lower positions.
+    :param road: Road class instance
+    :param maxh: positive integer, threshold value, above this value all grains are removed
+    :return:
+    """
+    # maxh = 7
     while max(road) > maxh:
         for i in range(road.size):
             if road[i] > maxh:
@@ -60,8 +83,15 @@ def max_smoothing(road: Road, maxh: int):
 
 
 def slope_smoothing(road: Road):
+    """
+    Pairwise comparison of neighbouring elements in the road.
+    If their height difference is bigger than one they grains from the bigger one are removed
+    and put on the lower position.
+    :param road: Road class
+    :return:
+    """
     for i in range(road.size):
-        i2 = (i+1) % road.size
+        i2 = (i + 1) % road.size
         height1 = road[i]
         height2 = road[i2]
         diff = height1 - height2
@@ -73,12 +103,13 @@ def slope_smoothing(road: Road):
             road.remove_grain(i2)
 
 
-
 def general_slope_smoothing(road: Road, slope_inverse=3):
     """
-
-    :param road:
-    :param slope_inverse:
+    TODO DOES NOT WORK YET
+    General slope smoothing function with an aimed slope of 1/slope_inverse for the heapes.
+    I.e. if slope_inverse=3 the heaps should a an incline of 1/3.
+    :param road: Road class instance
+    :param slope_inverse: positive integer, define the slope as 1/slope_inverse
     :return:
     """
     if slope_inverse < 1:  # do nothing if the slope is not a positive integer
@@ -89,7 +120,7 @@ def general_slope_smoothing(road: Road, slope_inverse=3):
         average_over_next_segment = sum_over_next_segment / (2 * slope_inverse)
         average_floor_int = int(average_over_next_segment)
         start_segm_height = road[i]
-        end_segm_index = end_segm_slice_point-1
+        end_segm_index = end_segm_slice_point - 1
         end_segm_height = road.piles[end_segm_index]
         road.piles[i:end_segm_slice_point] = average_floor_int
 
@@ -129,8 +160,9 @@ def smoothing_strategy1(road: Road, wheel: Wheel, args: list):
     # print_road_surface(road, wheel.xf, wheel.diameter)
 
     for i in range(iterations):
-         slope_smoothing(road)
+        slope_smoothing(road)
     # max_smoothing(road, (road.height+2) )
+
 
 def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
     if len(args) != 2:
@@ -144,13 +176,12 @@ def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
     # print_road_surface(road, wheel.xf, wheel.diameter)
 
     for i in range(iterations):
-         slope_smoothing(road)
+        slope_smoothing(road)
 
     random_wind_smoothing(road, h_max_wind)
 
 
-
-def smoothing(road: Road, wheel: Wheel,  method: str,  smoothing_args: list ):
+def smoothing(road: Road, wheel: Wheel, method: str, smoothing_args: list):
     """
     @TO DO THE SAME FORMAT AS digging.py, this would be the general function and then we
     can consider sub-smoothing procedures. This one would be one procedure, for example --->
@@ -166,26 +197,15 @@ def smoothing(road: Road, wheel: Wheel,  method: str,  smoothing_args: list ):
         print("Using default smoothing strategy 1.")
         return smoothing_strategy1(road, wheel, smoothing_args)
 
-    #print("Before doing smoothing")
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-    #max_smoothing(road, (road.height+5) )
-    #print_road_surface(road, wheel.xf, wheel.diameter)
+    # print("Before doing smoothing")
+    # print_road_surface(road, wheel.xf, wheel.diameter)
+    # max_smoothing(road, (road.height+5) )
+    # print_road_surface(road, wheel.xf, wheel.diameter)
 
-   # for i in range(iterations):
-   #      slope_smoothing(road)
-    #max_smoothing(road, (road.height+2) )
-    #random_wind_smoothing(road, (road.height+2) )
-    #print("after doing smoothing")
-    #print_road_surface(road, wheel.xf, wheel.diameter)
-    #print("end smoothing iter")
-
-
-
-
-
-
-
-
-
-
-
+# for i in range(iterations):
+#      slope_smoothing(road)
+# max_smoothing(road, (road.height+2) )
+# random_wind_smoothing(road, (road.height+2) )
+# print("after doing smoothing")
+# print_road_surface(road, wheel.xf, wheel.diameter)
+# print("end smoothing iter")
