@@ -106,16 +106,21 @@ def main():
     #############################################################
     #                 SIMULATION BODY                           #
     #############################################################
+    average_simulation = True
 
-    # Print the initial road-wheel configuration
-    print_road_surface(road, wheel.xf, wheel.diameter)
-    # Perform the wheel passes
-    if debugging is False:
-        wheel_pass(road, wheel, number_of_wheel_passes, 'max',
-                   dig_method, dig_probability_args,
-                   smoothing_method, smoothing_args)
+    if average_simulation == False:
+        # Print the initial road-wheel configuration
+        print_road_surface(road, wheel.xf, wheel.diameter)
+        # Perform the wheel passes
+        if debugging is False:
+            wheel_pass(road, wheel, number_of_wheel_passes, 'max',
+                       dig_method, dig_probability_args,
+                       smoothing_method, smoothing_args)
+        else:
+            wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
     else:
-        wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
+        average_simulations(1)
+
     print("\nThe simulation has finished...\n")
 
     ##############################################################
@@ -124,7 +129,7 @@ def main():
     # save_road(road, 'test_road1.pkl')
     print_road_surface(road, wheel.xf, wheel.diameter)
 
-    plot_road(road)
+    #plot_road(road)
 
 
 if __name__ == '__main__':
