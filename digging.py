@@ -92,12 +92,12 @@ def dig_backwards_softness(road: Road, wheel: Wheel, position: int, dig_probabil
     random_probabilities = np.random.uniform(0, 1, wheel.diameter)
 
     dig_probabilities = dig_probability_function(road.piles[remove_from], dig_probability_args)
-    print(dig_probabilities)
+    #print(dig_probabilities)
     increments = (random_probabilities <= dig_probabilities).astype(int)
 
-    if len(remove_from) != len(put_on):
-        print("\nWe are going to remove or put more or less than put or remove grains\n")
-        sys.exit()
+    #if len(remove_from) != len(put_on):
+       # print("\nWe are going to remove or put more or less than put or remove grains\n")
+        #sys.exit()
 
     road.piles[remove_from] -= increments
     road.piles[put_on] += increments
