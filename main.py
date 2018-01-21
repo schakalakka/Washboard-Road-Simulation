@@ -40,7 +40,9 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             print_road_surface(road, wheel.xf, wheel.diameter)
 
-def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str, dig_method: str, dig_probability_arguments: list):
+def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
+                         dig_method: str, dig_probability_arguments: list,
+                         smoothing_method: str, smoothing_arguments: list):
     """
      This function performs a loop of wheel passes through a road until 'max_iterations'
      wheel passes have been performed. The successive wheel passes modify the road surface.
@@ -54,7 +56,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
     current_passes = 0
     while wheel.number_of_passes < max_iterations:
         if current_passes < wheel.number_of_passes:
-            smoothing(road, wheel, 5)
+            smoothing(road, wheel, smoothing_method, smoothing_arguments)
             current_passes = wheel.number_of_passes
         initial_position = wheel.xf
 
@@ -76,7 +78,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
         final_position = wheel.xf
         if final_position <= initial_position:
-            smoothing(road, wheel, 5)
+            smoothing(road, wheel, smoothing_method, smoothing_arguments)
             wheel.number_of_passes += 1
             print(f'\nIteration number {wheel.number_of_passes}')
             print(
