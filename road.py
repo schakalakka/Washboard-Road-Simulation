@@ -32,11 +32,11 @@ class Road:
         # Store the number of initial grains (the total number of sand grains) that the road contains.
         self.initial_number_of_grains = self.get_number_of_grains()
 
-    def __getitem__(self, item: int):
-        return self.piles[item]
+    def __getitem__(self, key: int):
+        return self.piles[key % self.size]
 
     def __setitem__(self, key: int, value: int):
-        self.piles[key] = value
+        self.piles[key % self.size] = value
 
     def get_number_of_grains(self) -> int:
         """
@@ -44,13 +44,20 @@ class Road:
         """
         return np.sum(self.piles)
 
-    def add_random_irregularities(self, nr_of_random_irregularities: int):
+    def add_random_irregularities(self, nr_of_random_irregularities: int, in_segment=None):
         """
-        @TODO
-        :param nr_of_random_irregularities: @TODO
+        This methods adds random irregularities to the road.
+        If in_segment is None it will consider the whole road
+        if in_segment is a tuple of two integers it will
+        :param nr_of_random_irregularities: int
+        :param in_segment: Tuple(int,int) or None
         """
-        irregular_positions = np.random.randint(0, len(self.piles), nr_of_random_irregularities)
-        self.piles[irregular_positions] = [self.height + 1] * nr_of_random_irregularities
+        if not in_segment:
+            in_segment = (0, self.size)
+        elif type(in_segment) is not tuple or in_segment[0] < in_segment[1]:
+            return
+        irregular_positions = np.random.randint(in_segment[0], in_segment[1], nr_of_random_irregularities)
+        self.add_grains(irregular_positions, [1] * nr_of_random_irregularities)
 
     def add_specific_irregularities(self, positions: list, n_grains: list):
         """
@@ -66,7 +73,7 @@ class Road:
         :param position:
         :param n_grains:
         """
-        self.piles[position] += n_grains
+        self.piles[position % self.size] += n_grains
 
     def remove_grain(self, position: int, n_grains=1):
         """
@@ -74,7 +81,7 @@ class Road:
         :param position:
         :param n_grains:
         """
-        self.piles[position] -= n_grains
+        self.piles[position % self.size] -= n_grains
 
     def add_grains(self, positions: list, n_grains: list):
         """
@@ -82,10 +89,8 @@ class Road:
         :param positions:
         :param n_grains:
         """
-        counter = 0
-        for position in positions:
-            self.add_grain(positions[position], n_grains[counter])
-            counter += 1
+        for i, position in enumerate(positions):
+            self.add_grain(position, n_grains[i])
 
     def remove_grains(self, positions: list, n_grains: list):
         """
@@ -93,7 +98,5 @@ class Road:
         :param positions:
         :param n_grains:
         """
-        counter = 0
-        for position in positions:
-            self.remove_grain(positions[position], n_grains[counter])
-            counter += 1
+        for i, position in enumerate(positions):
+            self.remove_grain(positions[position], n_grains[i])
