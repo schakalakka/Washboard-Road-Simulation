@@ -3,6 +3,7 @@ from smoothing import *
 from utils import *
 from bump import *
 
+
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                dig_method: str, dig_probability_arguments: list,
                smoothing_method: str, smoothing_arguments: list):
@@ -15,6 +16,9 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
     :param max_iterations: maximum number of wheel passes (iterations)
     :param bump_method: str, method name for the 'determine_bump_height' function
     :param dig_method: str, method name for the 'digging' function
+    :param dig_probability_arguments:
+    :param smoothing_method:
+    :param smoothing_arguments:
     """
     current_passes = 0
     while wheel.number_of_passes < max_iterations:
@@ -26,7 +30,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         bump_height = determine_bump_height(road, wheel, bump_position, method=bump_method)
         wheel.jump(road, bump_height)
 
-        digging(road, wheel, wheel.xf, method=dig_method, dig_probability_args = dig_probability_arguments)
+        digging(road, wheel, wheel.xf, method=dig_method, dig_probability_args=dig_probability_arguments)
 
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
@@ -40,6 +44,7 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                 f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
             print_road_surface(road, wheel.xf, wheel.diameter)
 
+
 def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                          dig_method: str, dig_probability_arguments: list,
                          smoothing_method: str, smoothing_arguments: list):
@@ -52,6 +57,9 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
     :param max_iterations: maximum number of wheel passes (iterations)
     :param bump_method: str, method name for the 'determine_bump_height' function
     :param dig_method: str, method name for the 'digging' function
+    :param dig_probability_arguments:
+    :param smoothing_method:
+    :param smoothing_arguments:
     """
     current_passes = 0
     while wheel.number_of_passes < max_iterations:
@@ -71,7 +79,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
         print_road_surface(road, wheel.xf, wheel.diameter)
 
-        digging(road, wheel, wheel.xf, method=dig_method, dig_probability_args = dig_probability_arguments)
+        digging(road, wheel, wheel.xf, method=dig_method, dig_probability_args=dig_probability_arguments)
 
         wheel.update_position(wheel.diameter)
         wheel.set_elevation(road.piles[wheel.xf])
@@ -87,14 +95,13 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
 
 
 def main():
-
     #######################################################
     #            SIMULATION PARAMETERS AND CONSTANTS      #
     #######################################################
 
     from initialization import init
-    road, wheel, debugging, number_of_wheel_passes, dig_method,\
-        dig_probability_args, smoothing_method, smoothing_args = init()
+    road, wheel, debugging, number_of_wheel_passes, dig_method, \
+    dig_probability_args, smoothing_method, smoothing_args = init()
 
     #############################################################
     #                 SIMULATION BODY                           #
@@ -114,7 +121,7 @@ def main():
     ##############################################################
     #         SAVE ROAD IN FILE AND PLOTS                        #
     ##############################################################
-    #save_road(road, 'test_road1.pkl')
+    # save_road(road, 'test_road1.pkl')
     print_road_surface(road, wheel.xf, wheel.diameter)
 
     plot_road(road)

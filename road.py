@@ -33,9 +33,22 @@ class Road:
         self.initial_number_of_grains = self.get_number_of_grains()
 
     def __getitem__(self, key: int):
+        """
+        Getter function to make subscripting available.
+        Use: road[key]
+        :param key:
+        :return: height at key position, road.piles[key]
+        """
         return self.piles[key]
 
     def __setitem__(self, key: int, value: int):
+        """
+        Setter function to make assignable subscripting available.
+        Use: road[key] = foo
+        :param key: position on the road
+        :param value: assigned height
+        :return:
+        """
         self.piles[key % self.size] = value
 
     def get_number_of_grains(self) -> int:
@@ -61,6 +74,7 @@ class Road:
 
     def add_specific_irregularities(self, positions: list, n_grains: list):
         """
+        TODO  kind of useless with the add_grain/add_grains methods
         :param positions: positions or pile numbers of the road where to add extra grains
         :param n_grains: numbers of grains to add in each position
         :return:
@@ -69,34 +83,38 @@ class Road:
 
     def add_grain(self, position: int, n_grains=1):
         """
-        @SO FAR NOT USED
-        :param position:
-        :param n_grains:
+        Adds n_grains to position on the road.
+        Catches out of bounds positions with modulo operator.
+        :param position: positive integer
+        :param n_grains: number of grains to add at position
         """
         self.piles[position % self.size] += n_grains
 
     def remove_grain(self, position: int, n_grains=1):
         """
-        @SO FAR NOT USED
-        :param position:
-        :param n_grains:
+        Removes n_grains from position on the road.
+        Catches out of bounds positions with modulo operator.
+        :param position: positive integer
+        :param n_grains: number of grains to remove from position
         """
         self.piles[position % self.size] -= n_grains
 
     def add_grains(self, positions: list, n_grains: list):
         """
-        @ SO FAR NOT USED
-        :param positions:
-        :param n_grains:
+        Convenience function, gets a list of positions and a list of number of grains and adds them to the specific
+        positions
+        :param positions: list of positions
+        :param n_grains: list of number of grains to add
         """
         for i, position in enumerate(positions):
             self.add_grain(position, n_grains[i])
 
     def remove_grains(self, positions: list, n_grains: list):
         """
-        @ SO FAR NOT USED
-        :param positions:
-        :param n_grains:
+        Convenience function, gets a list of positions and a list of number of grains and removes them from the specific
+        positions
+        :param positions: list of positions
+        :param n_grains: list of number of grains to remove
         """
         for i, position in enumerate(positions):
             self.remove_grain(positions[position], n_grains[i])

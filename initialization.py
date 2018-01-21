@@ -1,6 +1,8 @@
 import sys
 from road import Road
 from wheel import Wheel
+
+
 #######################################################
 #            SIMULATION PARAMETERS AND CONSTANTS      #
 #######################################################
@@ -14,14 +16,13 @@ def init():
     wheel_size = 6  # (Initial) wheel diameter
     velocity = 5  # Proportionality constant to jump (BETA) 2
 
-
     #######################################################
     # Initialization of a Road, road, and a Wheel, wheel. #
     #######################################################
 
-    #road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
-    #random.seed(2)
-    road =Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
+    # road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
+    # random.seed(2)
+    road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
     wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
     #########################################################
@@ -61,5 +62,5 @@ def init():
         print('The smoothing method/strategy name is not valid')
         sys.exit()
 
-    return(road, wheel, debugging, number_of_wheel_passes, dig_method,
-           dig_probability_args, smoothing_method, smoothing_args)
+    return (road, wheel, debugging, number_of_wheel_passes, dig_method,
+            dig_probability_args, smoothing_method, smoothing_args)
