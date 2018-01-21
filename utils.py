@@ -2,6 +2,30 @@ from road import Road
 import pickle
 import matplotlib.pyplot as plt
 
+def average_simulations(avg_iterations = 1):
+    from initialization import init
+    from main import wheel_pass
+    import numpy as np
+
+    road, wheel, debugging, number_of_wheel_passes, dig_method, \
+    dig_probability_args, smoothing_method, smoothing_args = init()
+
+    initial_profile = np.copy(road.piles)
+    avg_profile = np.full(road.size, 0, dtype=np.float)
+
+    for iter in range(avg_iterations):
+        wheel_pass(road, wheel, number_of_wheel_passes, 'max',
+                   dig_method, dig_probability_args,
+                   smoothing_method, smoothing_args)
+        final_road_profile = np.copy(road.piles)
+        avg_profile += final_road_profile
+        road.piles = initial_profile
+
+    avg_profile = avg_profile * (1.0/avg_iterations)
+    road.piles = np.copy(avg_profile)
+
+    plot_road(road)
+
 
 def plot_road(road: Road):
     """
@@ -16,11 +40,11 @@ def plot_road(road: Road):
     plt.grid(True)
 
     # plt.axes().set_aspect('equal', 'datalim')
-    xmin = 0
-    xmax = road.size
-    ymin = 0 - 5
-    ymax = max(road.piles) + 10
-    plt.axis([xmin, xmax, ymin, ymax])
+    x_min = 0
+    x_max = road.size
+    y_min = 0 - 5
+    y_max = max(road.piles) + 10
+    plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
 
     plt.show()
