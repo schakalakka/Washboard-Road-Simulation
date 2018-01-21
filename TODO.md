@@ -5,8 +5,6 @@
 
 - [x] 1.2) RANDOM wind (global) smoothing function given a maximum height threshold put all the grains above that to the  RANDOM positions. 
 
-- [ ] 2) A generalized slope smoothing function (*Andreas*)
-
 - [x] 3) Organize smoothing.py as in digging.py (*Dani*)
 
 - [ ] Latex Section 1 (see Overleaf), (*Cristian*)
@@ -19,5 +17,7 @@
 road profile by using the profile of all those iterations.7
 
 - [ ] Do a function or similar that given a filename and a road prints a Image into a file (png, eps)
+
+- [ ] 2) A generalized slope smoothing function, if we have time or we can see what was the Andrea's idea but that the code failed.
 
 
