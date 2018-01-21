@@ -133,7 +133,7 @@ def smoothing_strategy1(road: Road, wheel: Wheel, args: list):
     # max_smoothing(road, (road.height+2) )
 
 def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
-    if len(args) != 2:
+    if len(args) != 3:
         print('Error: incorrect number of arguments in smoothing_strategy2')
         sys.exit()
     h_max = args[0]
@@ -148,6 +148,23 @@ def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
 
     random_wind_smoothing(road, h_max_wind)
 
+def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
+    if len(args) != 3:
+        print('Error: incorrect number of arguments in smoothing_strategy2')
+        sys.exit()
+    h_max = args[0]
+    iterations = args[1]
+    increment_h_max_wind = args[2] #At least value equal to 1
+
+    max_smoothing(road, h_max)
+
+    for i in range(iterations):
+         slope_smoothing(road)
+
+    h_max_road = max(road.piles)
+    h_max_wind = h_max_road - increment_h_max_wind
+
+    random_wind_smoothing(road, h_max_wind)
 
 
 def smoothing(road: Road, wheel: Wheel,  method: str,  smoothing_args: list ):
@@ -160,8 +177,10 @@ def smoothing(road: Road, wheel: Wheel,  method: str,  smoothing_args: list ):
     """
     if method == 'strategy 1':
         return smoothing_strategy1(road, wheel, smoothing_args)
-    if method == 'strategy 2':
+    elif method == 'strategy 2':
         return smoothing_strategy2(road, wheel, smoothing_args)
+    elif method == 'strategy 3':
+        return smoothing_strategy3(road, wheel, smoothing_args)
     else:
         print("Using default smoothing strategy 1.")
         return smoothing_strategy1(road, wheel, smoothing_args)

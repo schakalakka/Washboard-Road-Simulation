@@ -45,15 +45,18 @@ def init():
     ###########################################################
     #                 SMOOTHING METHOD                        #
     ###########################################################
-    smoothing_method = 'strategy 1'
+    smoothing_method = 'strategy 3'
     h_max = road.height + 3
     h_max_wind = road.height + 4
     slope_iterations = 5
+    increment_h_max_wind = 1
 
     if (smoothing_method == 'strategy 1'):
         smoothing_args = list([h_max, slope_iterations])
     elif (smoothing_method == 'strategy 2'):
         smoothing_args = list([h_max, slope_iterations, h_max_wind])
+    elif (smoothing_method == 'strategy 3'):
+        smoothing_args = list([h_max, slope_iterations, increment_h_max_wind])
     else:
         print('The smoothing method/strategy name is not valid')
         sys.exit()

@@ -69,12 +69,15 @@ def digging(road: Road, wheel: Wheel, position: int, method='backwards uniform',
     """
     if method == 'backwards uniform':
         return dig_backwards_softness(road, wheel, position, constant_dig_probability, dig_probability_args)
-    if method == 'backwards tailed exponential':
+    elif method == 'backwards tailed exponential':
         return dig_backwards_softness(road, wheel, position, tailed_exponential_dig_probability, dig_probability_args)
-    if method == 'backwards non-tailed exponential':
+    elif method == 'backwards non-tailed exponential':
         return dig_backwards_softness(road, wheel, position, non_tailed_exponential_dig_probability, dig_probability_args)
-    if method == 'backwards quadratic':
+    elif method == 'backwards quadratic':
         return dig_backwards_softness(road, wheel, position, quadratic_dig_probability, dig_probability_args)
+    else:
+        print("Using default digging backwards uniform.")
+        return dig_backwards_softness(road, wheel, position, constant_dig_probability, dig_probability_args)
 
 
 def dig_backwards_softness(road: Road, wheel: Wheel, position: int, dig_probability_function, dig_probability_args: list):  # -> Tuple[np.ndarray, int]:
