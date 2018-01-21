@@ -91,81 +91,10 @@ def main():
     #######################################################
     #            SIMULATION PARAMETERS AND CONSTANTS      #
     #######################################################
-    # @Andreas, you said something like to put this in a separate file?
 
-    debugging = False  # True
-
-    number_of_wheel_passes = 200  # number of 'vehicles' that pass through the road in the whole simulation
-    road_size = 200  # length of the road
-    standard_height = 10  # standard height or initial height of the road
-    nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_irregularities function
-    wheel_size = 6  # (Initial) wheel diameter
-    velocity = 5  # Proportionality constant to jump (BETA) 2
-
-
-    #######################################################
-    # Initialization of a Road, road, and a Wheel, wheel. #
-    #######################################################
-
-    #road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
-    #random.seed(2)
-    road =Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
-    wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
-
-    #########################################################
-    #                 DIGGING METHOD                        #
-    #########################################################
-    dig_method = 'backwards tailed exponential'
-    constant_probability = 1
-    h0 = road.height
-    alpha = 1
-
-    if (dig_method == 'backwards tailed exponential') | (dig_method == 'backwards non-tailed exponential'):
-        dig_probability_args = list([h0, alpha])
-    elif dig_method == 'backwards uniform':
-        dig_probability_args = list([constant_probability])
-    elif dig_method == 'backwards quadratic':
-        dig_probability_args = list([h0])
-    else:
-        print('The digging method name is not valid')
-        sys.exit()
-
-    ###########################################################
-    #                 SMOOTHING METHOD                        #
-    ###########################################################
-    smoothing_method = 'strategy 1'
-    h_max = road.height + 3
-    h_max_wind = road.height + 4
-    slope_iterations = 5
-
-    if (smoothing_method == 'strategy 1'):
-        smoothing_args = list([h_max, slope_iterations])
-    elif (smoothing_method == 'strategy 2'):
-        smoothing_args = list([h_max, slope_iterations, h_max_wind])
-    else:
-        print('The smoothing method/strategy name is not valid')
-        sys.exit()
-
-     ##todo
-
-     #1) deterministic wind (global) smoothing function
-       # given a maximum height threshold put all the grains above that
-       # to the positions with lowest height
-
-      #1.2) RANDOM wind (global) smoothing function
-       # given a maximum height threshold put all the grains above that
-       # to the  RANDOM positions
-
-     #2) a generalized slope smoothing function:
-
-     #3) Organize smoothing.py as in digging.py
-
-
-
-
-
-
-
+    from initialization import init
+    road, wheel, debugging, number_of_wheel_passes, dig_method,\
+        dig_probability_args, smoothing_method, smoothing_args = init()
 
     #############################################################
     #                 SIMULATION BODY                           #
@@ -187,7 +116,6 @@ def main():
     ##############################################################
     #save_road(road, 'test_road1.pkl')
     print_road_surface(road, wheel.xf, wheel.diameter)
-
 
     plot_road(road)
 
