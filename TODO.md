@@ -12,3 +12,10 @@
 - [ ] Latex Section 1 (see Overleaf), (*Cristian*)
 
 - [ ] Comment functions and so (not prioritary, first the above things) 
+
+- [ ] Do a procedure to, starting with a same initial road profile, do the simulation a certain number of times and then plot the AVERAGE
+road profile by using the profile of all those iterations.7
+
+- [ ] Do a function or similar that given a filename and a road prints a Image into a file (png, eps)
+
+
