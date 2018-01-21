@@ -33,7 +33,7 @@ class Road:
         self.initial_number_of_grains = self.get_number_of_grains()
 
     def __getitem__(self, key: int):
-        return self.piles[key % self.size]
+        return self.piles[key]
 
     def __setitem__(self, key: int, value: int):
         self.piles[key % self.size] = value
