@@ -24,8 +24,6 @@ def random_wind_smoothing(road: Road, maxh: int):
                 temp_minimum=min(road)
                 temp_minimum_indices = np.where(road.piles == temp_minimum)
                 chosen_index = np.random.choice(temp_minimum_indices[0])
-                print(f'chosen index: {chosen_index}, remove from index: {i} ')
-                print(f'{road.piles}')
                 road.remove_grain(i)
                 road.add_grain(chosen_index)
 
