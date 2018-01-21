@@ -11,7 +11,7 @@
 
 - [ ] Latex Section 2 (see Overleaf), (*Cristian*)
 
-- [ ] Comment functions and so (not prioritary, first the above things) 
+- [x] Comment functions and so (not prioritary, first the above things) 
 
 - [ ] More smoothing strategies
 
