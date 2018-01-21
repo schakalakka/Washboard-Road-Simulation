@@ -131,6 +131,19 @@ def main():
     ###########################################################
     #                 SMOOTHING METHOD                        #
     ###########################################################
+    smoothing_method = 'strategy 1'
+    h_max = road.height + 3
+    h_max_wind = road.height + 4
+    slope_iterations = 5
+
+    if (smoothing_method == 'strategy 1'):
+        smoothing_args = list([h_max, slope_iterations])
+    elif (smoothing_method == 'strategy 2'):
+        smoothing_args = list([h_max, slope_iterations, h_max_wind])
+    else:
+        print('The smoothing method/strategy name is not valid')
+        sys.exit()
+
      ##todo
 
      #1) deterministic wind (global) smoothing function
@@ -146,6 +159,12 @@ def main():
      #3) Organize smoothing.py as in digging.py
 
 
+
+
+
+
+
+
     #############################################################
     #                 SIMULATION BODY                           #
     #############################################################
@@ -154,7 +173,9 @@ def main():
     print_road_surface(road, wheel.xf, wheel.diameter)
     # Perform the wheel passes
     if debugging is False:
-        wheel_pass(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
+        wheel_pass(road, wheel, number_of_wheel_passes, 'max',
+                   dig_method, dig_probability_args,
+                   smoothing_method, smoothing_args)
     else:
         wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
     print("\nThe simulation has finished...\n")
