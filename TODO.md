@@ -13,12 +13,14 @@
 
 - [x] Comment functions and so (not prioritary, first the above things) 
 
-- [ ] More smoothing strategies
+- [ ] Debug smoothing strategy 3 (ask dani?)
+
+- [ ] More smoothing strategies: at least have a good smoothing strategy (reasonable, realistic,....)
 
 - [ ] 2) A generalized slope smoothing function, if we have time or we can see what was the Andrea's idea but that the code failed.
 
 # TODO list for results / studies
 - [ ] Do a procedure to, starting with a same initial road profile, do the simulation a certain number of times and then plot the AVERAGE
-road profile by using the profile of all those iterations.7
+road profile by using the profile of all those iterations. **Dani: I have tried it but the function has to be debugged (some unexpected behaviour)**
 
 - [ ] Do a function or similar that given a filename and a road prints a Image into a file (png, eps)
