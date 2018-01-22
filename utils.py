@@ -42,8 +42,8 @@ def plot_road(road: Road, **kwargs):
     plt.title('Road surface profile')
     parameters = []
     if kwargs:
-        foo = ', '.join(f'{key}: {value}' for key, value in kwargs.items())
-    plt.title(foo)
+        title_string = ', '.join(f'{key}: {value}' for key, value in kwargs.items())
+    plt.title(title_string)
     plt.grid(True)
 
     # plt.axes().set_aspect('equal', 'datalim')
@@ -55,7 +55,7 @@ def plot_road(road: Road, **kwargs):
     plt.axes().set_aspect('equal', 'box')
 
     # plt.show()
-    plt.savefig(f'plots/{foo}.png')
+    plt.savefig(f'plots/{title_string}.png')
 
 
 def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):

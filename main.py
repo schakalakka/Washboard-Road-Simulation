@@ -41,10 +41,10 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
         if final_position <= initial_position:
             smoothing(road, wheel, smoothing_method, smoothing_arguments)
             wheel.number_of_passes += 1
-            print(f'\nIteration number {wheel.number_of_passes}')
-            print(
-                f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
-            print_road_surface(road, wheel.xf, wheel.diameter)
+            if verbose:
+                print(f'\nIteration number {wheel.number_of_passes}')
+                print(f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
+                print_road_surface(road, wheel.xf, wheel.diameter)
 
 
 def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
@@ -112,8 +112,9 @@ def main(kwargs):
     average_simulation = False
 
     if average_simulation == False:
-        # Print the initial road-wheel configuration
-        print_road_surface(road, wheel.xf, wheel.diameter)
+        if verbose:
+            # Print the initial road-wheel configuration
+            print_road_surface(road, wheel.xf, wheel.diameter)
         # Perform the wheel passes
         if debugging is False:
             wheel_pass(road, wheel, number_of_wheel_passes, 'max',
@@ -123,14 +124,15 @@ def main(kwargs):
             wheel_pass_debugging(road, wheel, number_of_wheel_passes, 'max', dig_method, dig_probability_args)
     else:
         average_simulations(1)
-
-    print("\nThe simulation has finished...\n")
+    if verbose:
+        print("\nThe simulation has finished...\n")
 
     ##############################################################
     #         SAVE ROAD IN FILE AND PLOTS                        #
     ##############################################################
     # save_road(road, 'test_road1.pkl')
-    print_road_surface(road, wheel.xf, wheel.diameter)
+    if verbose:
+        print_road_surface(road, wheel.xf, wheel.diameter)
 
     plot_road(road, **kwargs)
 
