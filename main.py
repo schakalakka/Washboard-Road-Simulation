@@ -96,14 +96,15 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
             print_road_surface(road, wheel.xf, wheel.diameter)
 
 
-def main():
+def main(kwargs):
     #######################################################
-    #            SIMULATION PARAMETERS AND CONSTANTS      #
+    # Initialization of a Road, road, and a Wheel, wheel. #
     #######################################################
 
-    # from initialization import init
-    # road, wheel, debugging, number_of_wheel_passes, dig_method, \
-    # dig_probability_args, smoothing_method, smoothing_args = init()
+    # road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
+    # random.seed(2)
+    road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
+    wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
     #############################################################
     #                 SIMULATION BODY                           #
@@ -131,7 +132,7 @@ def main():
     # save_road(road, 'test_road1.pkl')
     print_road_surface(road, wheel.xf, wheel.diameter)
 
-    plot_road(road)
+    plot_road(road, **kwargs)
 
 
 if __name__ == '__main__':

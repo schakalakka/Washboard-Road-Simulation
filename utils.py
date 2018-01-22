@@ -29,16 +29,21 @@ def average_simulations(avg_iterations = 1):
     plot_road(road)
 
 
-def plot_road(road: Road):
+def plot_road(road: Road, **kwargs):
     """
     Plots the road surface via matplotlib for a better smoother display.
     :param road:
     :return:
     """
+    plt.clf()
     plt.plot(road.piles)
     plt.xlabel('Distance (block size units)')
     plt.ylabel('Surface height (block size units)')
     plt.title('Road surface profile')
+    parameters = []
+    if kwargs:
+        foo = ', '.join(f'{key}: {value}' for key, value in kwargs.items())
+    plt.title(foo)
     plt.grid(True)
 
     # plt.axes().set_aspect('equal', 'datalim')
@@ -49,7 +54,8 @@ def plot_road(road: Road):
     plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
 
-    plt.show()
+    # plt.show()
+    plt.savefig(f'plots/{foo}.png')
 
 
 def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):

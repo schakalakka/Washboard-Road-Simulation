@@ -14,21 +14,13 @@ nr_of_irregular_points = 20  # number of irregularities for the Road.add_random_
 wheel_size = 6  # (Initial) wheel diameter
 velocity = 5  # Proportionality constant to jump (BETA) 2
 
-#######################################################
-# Initialization of a Road, road, and a Wheel, wheel. #
-#######################################################
-
-# road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
-# random.seed(2)
-road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
-wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
 
 #########################################################
 #                 DIGGING METHOD                        #
 #########################################################
 dig_method = 'backwards tailed exponential'
 constant_probability = 1
-h0 = road.height
+h0 = standard_height + 0
 alpha = 1
 
 if (dig_method == 'backwards tailed exponential') | (dig_method == 'backwards non-tailed exponential'):
@@ -45,8 +37,8 @@ else:
 #                 SMOOTHING METHOD                        #
 ###########################################################
 smoothing_method = 'strategy 1'
-h_max = road.height + 3
-h_max_wind = road.height + 4
+h_max = standard_height + 3
+h_max_wind = standard_height + 4
 slope_iterations = 6
 increment_h_max_wind = 1  # NOT WORKING, strategy3, eternal loop¿
 
