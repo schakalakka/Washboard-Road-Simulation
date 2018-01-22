@@ -24,9 +24,10 @@ road profile by using the profile of all those iterations. **Dani: I have tried 
 # TODO list for the REPORT
 - [ ] Section 1 (see overleaf first) , (Lila)
 - [ ] Section 2 (see overleaf first, and read section 3)  (Cristian)
+- [x] Section 3 (model description)  (Dani)
 - [ ] Section 3.1.1 jumping distance (?). hint: see paper to have idea
 - [ ] Section 3.1.2 bump height determination (?) hint: see paper to clarify the 'max method"
-- [ ] Section 3.1.3 digging models (Dani)
+- [x] Section 3.1.3 digging models (Dani)
 
 **Smoothing**
 - [ ] Brief introduction section 3.2
