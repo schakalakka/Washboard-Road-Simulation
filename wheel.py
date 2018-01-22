@@ -1,6 +1,9 @@
 import sys
 from road import Road
 
+from initialization import verbose
+
+
 class Wheel:
     """
     Object that represents a vehicle wheel
@@ -57,8 +60,9 @@ class Wheel:
         :param new_xf:
         """
         if new_xf >= self.period or new_xf < 0:
-            print('Intent to set xf to a negative number or out of the road. Applying periodic', self.period,
-                  'conditions.')
+            if verbose:
+                print('Intent to set xf to a negative number or out of the road. Applying periodic', self.period,
+                      'conditions.')
         self.xf = new_xf % self.period
         self.x0 = (self.xf - self.diameter + 1) % self.period
 
@@ -133,4 +137,3 @@ class Wheel:
         """
         self.update_position(self.velocity * bump_height + self.diameter)
         self.set_elevation(road.piles[self.xf])
-
