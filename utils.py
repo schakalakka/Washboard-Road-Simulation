@@ -2,13 +2,15 @@ from road import Road
 import pickle
 import matplotlib.pyplot as plt
 
+from initialization import *
+
 def average_simulations(avg_iterations = 1):
-    from initialization import init
+    # from initialization import init
     from main import wheel_pass
     import numpy as np
 
-    road, wheel, debugging, number_of_wheel_passes, dig_method, \
-    dig_probability_args, smoothing_method, smoothing_args = init()
+    # road, wheel, debugging, number_of_wheel_passes, dig_method, \
+    # dig_probability_args, smoothing_method, smoothing_args = init()
 
     initial_profile = np.copy(road.piles)
     avg_profile = np.full(road.size, 0, dtype=np.float)
@@ -59,7 +61,7 @@ def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
     :param wheel_size: integer or None
     :return: prints the road with or without the wheel as standard output.
     """
-    max_height = road.piles.max() + 1
+    max_height = max(road.piles) + 1
     current_height = max_height
     road_surface = []
     for i in range(max_height + 1):

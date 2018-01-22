@@ -3,6 +3,8 @@ from smoothing import *
 from utils import *
 from bump import *
 
+from initialization import *
+
 
 def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
                dig_method: str, dig_probability_arguments: list,
@@ -99,14 +101,14 @@ def main():
     #            SIMULATION PARAMETERS AND CONSTANTS      #
     #######################################################
 
-    from initialization import init
-    road, wheel, debugging, number_of_wheel_passes, dig_method, \
-    dig_probability_args, smoothing_method, smoothing_args = init()
+    # from initialization import init
+    # road, wheel, debugging, number_of_wheel_passes, dig_method, \
+    # dig_probability_args, smoothing_method, smoothing_args = init()
 
     #############################################################
     #                 SIMULATION BODY                           #
     #############################################################
-    average_simulation = True
+    average_simulation = False
 
     if average_simulation == False:
         # Print the initial road-wheel configuration
@@ -129,7 +131,7 @@ def main():
     # save_road(road, 'test_road1.pkl')
     print_road_surface(road, wheel.xf, wheel.diameter)
 
-    #plot_road(road)
+    plot_road(road)
 
 
 if __name__ == '__main__':
