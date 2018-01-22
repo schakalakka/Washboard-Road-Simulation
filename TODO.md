@@ -7,10 +7,6 @@
 
 - [x] 3) Organize smoothing.py as in digging.py (*Dani*)
 
-- [ ] Latex Section 1 (see Overleaf), (*Cristian*)
-
-- [ ] Latex Section 2 (see Overleaf), (*Cristian*)
-
 - [x] Comment functions and so (not prioritary, first the above things) 
 
 - [ ] Debug smoothing strategy 3 (ask dani?)
@@ -24,3 +20,18 @@
 road profile by using the profile of all those iterations. **Dani: I have tried it but the function has to be debugged (some unexpected behaviour)**
 
 - [ ] Do a function or similar that given a filename and a road prints a Image into a file (png, eps)
+
+# TODO list for the REPORT
+- [ ] Section 1 (see overleaf first) , (Lila)
+- [ ] Section 2 (see overleaf first, and read section 3)  (Cristian)
+- [x] Section 3 (model description)  (Dani)
+- [ ] Section 3.1.1 jumping distance (?). hint: see paper to have idea
+- [ ] Section 3.1.2 bump height determination (?) hint: see paper to clarify the 'max method"
+- [x] Section 3.1.3 digging models (Dani)
+
+**Smoothing**
+- [ ] Brief introduction section 3.2
+- [ ] Section 3.2.1  Diffusion efects (wind, rain ...).   (?)
+- [ ] Section 3.2.2 Gravity/stability effects (?)
+- [ ] Section 3.2.3 smoothing strategies (we can not do this section yet)
+
