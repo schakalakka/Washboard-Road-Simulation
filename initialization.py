@@ -1,6 +1,4 @@
 import sys
-from road import Road
-from wheel import Wheel
 
 #######################################################
 #            SIMULATION PARAMETERS AND CONSTANTS      #
