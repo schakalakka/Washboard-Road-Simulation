@@ -96,7 +96,7 @@ def wheel_pass_debugging(road: Road, wheel: Wheel, max_iterations: int, bump_met
             print_road_surface(road, wheel.xf, wheel.diameter)
 
 
-def main(kwargs):
+def main(kwargs=None):
     #######################################################
     # Initialization of a Road, road, and a Wheel, wheel. #
     #######################################################
@@ -134,7 +134,7 @@ def main(kwargs):
     if verbose:
         print_road_surface(road, wheel.xf, wheel.diameter)
 
-    plot_road(road, **kwargs)
+    plot_road(road, kwargs)
 
 
 if __name__ == '__main__':
