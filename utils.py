@@ -43,7 +43,7 @@ def plot_road(road: Road, **kwargs):
     parameters = []
     if kwargs:
         title_string = ', '.join(f'{key}: {value}' for key, value in kwargs.items())
-    plt.title(title_string)
+        plt.title(title_string)
     plt.grid(True)
 
     # plt.axes().set_aspect('equal', 'datalim')
