@@ -10,7 +10,7 @@ number_of_wheel_passes = 150  # number of 'vehicles' that pass through the road 
 road_size = 1000  # length of the road
 standard_height = 20  # standard height or initial height of the road
 nr_of_irregular_points = int(road_size/10)  # number of irregularities for the Road.add_random_irregularities function
-wheel_size = 6  # (Initial) wheel diameter
+wheel_size = 40  # (Initial) wheel diameter
 velocity = 5  # Proportionality constant to jump (BETA) 2
 
 
@@ -35,7 +35,7 @@ else:
 ###########################################################
 #                 SMOOTHING METHOD                        #
 ###########################################################
-smoothing_method = 'strategy 1'
+smoothing_method = 'strategy 3'
 h_max = standard_height + 3
 h_max_wind = standard_height + 4
 slope_iterations = 6

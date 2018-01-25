@@ -57,7 +57,7 @@ def plot_road(road: Road, kwargs=None):
     plt.axes().set_aspect('equal', 'box')
 
     if kwargs:
-        plt.savefig(f'plots/{file_string}.pdf', format='pdf')
+        plt.savefig(f'plots/{file_string}.png', dpi=900, format='png')
     else:
         plt.show()
 

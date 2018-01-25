@@ -194,7 +194,7 @@ def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
          slope_smoothing(road)
 
     h_max_road = max(road.piles)
-    h_max_wind = h_max_road - increment_h_max_wind
+    h_max_wind = max(h_max_road - increment_h_max_wind, road.height+2)
 
     random_wind_smoothing(road, h_max_wind)
 
