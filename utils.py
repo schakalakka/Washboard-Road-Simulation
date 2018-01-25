@@ -41,7 +41,7 @@ def plot_road(road: Road, kwargs=None):
     plt.ylabel('Surface height (block size units)')
     plt.title('Road surface profile')
     if kwargs:
-        title_string = ', '.join(f'{key}: {value}' for key, value in kwargs.items())
+        title_string = '\n'.join(f'{key}: {value}' for key, value in kwargs.items())
         file_string = '_'.join(f'{key}-{value}' for key, value in kwargs.items())
 
         plt.title(title_string)
@@ -51,13 +51,13 @@ def plot_road(road: Road, kwargs=None):
     # plt.axes().set_aspect('equal', 'datalim')
     x_min = 0
     x_max = road.size
-    y_min = 0 - 5
+    y_min = min(road.piles) - 10
     y_max = max(road.piles) + 10
     plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
 
     if kwargs:
-        plt.savefig(f'plots/{file_string}.png')
+        plt.savefig(f'plots/{file_string}.pdf', format='pdf')
     else:
         plt.show()
 
