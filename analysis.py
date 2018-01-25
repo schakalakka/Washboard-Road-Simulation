@@ -13,14 +13,22 @@ wheel_sizes = [4, 6, 8]
 velocities = [2, 5, 10]
 h0_list = [1, 2, 3, 4]
 alphas = [0.1, 0.5, 1]
+smothing_methods = ['strategy 1', 'strategy 2']  # , 'strategy 3']
+slope_iterations_list = [1, 2, 6, 10]
+h_max_list = [2, 3, 5]
 
-all_lists = [wheel_sizes, velocities, h0_list, alphas]
-
+all_lists = [wheel_sizes, velocities, h0_list, alphas, smothing_methods, slope_iterations_list, h_max_list]
+print(len(list(itertools.product(*all_lists))))
 for i, element in enumerate(itertools.product(*all_lists)):
-    print(i)
-    wheel_size = element[0]
-    velocity = element[1]
-    h0 = element[2] + standard_height
-    alpha = element[3]
-    parameter_dict = {'wheel_size': wheel_size, 'velocity': velocity, 'h0': h0, 'alpha': alpha}
-    main(parameter_dict)
+    if i >= 0:
+        print(i)
+        wheel_size = element[0]
+        velocity = element[1]
+        h0 = element[2] + standard_height
+        alpha = element[3]
+        smothing_method = element[4]
+        slope_iterations = element[5]
+        h_max = element[6] + standard_height
+        parameter_dict = {'wheel_size': wheel_size, 'velocity': velocity, 'h0': h0, 'alpha': alpha,
+                          'smothing_method': smothing_method, 'slope_iterations': slope_iterations, 'h_max': h_max}
+        main(parameter_dict)
