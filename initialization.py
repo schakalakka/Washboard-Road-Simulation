@@ -5,11 +5,17 @@ import sys
 #######################################################
 debugging = False  # True
 verbose = False
+save_initial_road = False
 
-number_of_wheel_passes = 100  # number of 'vehicles' that pass through the road in the whole simulation
-road_size = 30  # length of the road 1000
-standard_height = 1  # standard height or initial height of the road
+read_initial_road = True
+initial_road_filename = 'initial_road_equidistant.pkl'
+
+
+number_of_wheel_passes = 500  # number of 'vehicles' that pass through the road in the whole simulation
+road_size = 500  # length of the road 1000
+standard_height = 10  # standard height or initial height of the road
 nr_of_irregular_points = int(road_size/10)  # number of irregularities for the Road.add_random_irregularities function
+
 wheel_size = 4  # (Initial) wheel diameter 40
 velocity = 5  # Proportionality constant to jump (BETA) 2
 
@@ -17,7 +23,7 @@ velocity = 5  # Proportionality constant to jump (BETA) 2
 #########################################################
 #                 DIGGING METHOD                        #
 #########################################################
-dig_method = 'backwards tailed exponential'
+dig_method = 'backwards tailed exponential' #'backwards uniform'#'backwards tailed exponential'
 constant_probability = 1
 h0 = standard_height + 0
 alpha = 1
@@ -41,13 +47,15 @@ h_max_wind = standard_height + 4
 slope_iterations = 6
 increment_h_max_wind = 1
 lower_bound_increment_h_max_wind = 1 # In fact it is: lower bound of h_max = road.height + l_b_i_h_max_wind
+p_wind = 0 #Probability of wind effects occurring in each call to the general smoothing function
+
 
 if smoothing_method == 'strategy 1':
     smoothing_args = list([h_max, slope_iterations])
 elif smoothing_method == 'strategy 2':
-    smoothing_args = list([h_max, slope_iterations, h_max_wind])
+    smoothing_args = list([h_max, slope_iterations, h_max_wind,p_wind])
 elif smoothing_method == 'strategy 3':
-    smoothing_args = list([h_max, slope_iterations, increment_h_max_wind, lower_bound_increment_h_max_wind])
+    smoothing_args = list([h_max, slope_iterations, increment_h_max_wind, lower_bound_increment_h_max_wind,p_wind])
 else:
     print('The smoothing method/strategy name is not valid')
     sys.exit()

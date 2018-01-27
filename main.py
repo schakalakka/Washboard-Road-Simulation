@@ -103,8 +103,22 @@ def main(kwargs=None):
 
     # road = Road(road_size, standard_height, 'specific', list([4, 40]), list([1, 1]))
     # random.seed(2)
-    road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
-    wheel = Wheel(wheel_size, 0, standard_height, velocity, road.size)
+    if read_initial_road:
+        road = read_road(initial_road_filename)
+    else:
+        road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
+
+    #Initial road equidistant
+    if save_initial_road:
+        if initial_road_filename == 'initial_road_equidistant.pkl':
+            step = 10
+            rang = range(step, road_size,step)
+            road = Road(road_size, standard_height, 'specific', list([rang]), list([1 for i in rang]))
+        save_road(road, initial_road_filename)
+        print(f'Initial road saved with name {initial_road_filename}')
+        sys.exit()
+
+    wheel = Wheel(wheel_size, 0, road.height, velocity, road.size)
 
     #############################################################
     #                 SIMULATION BODY                           #
