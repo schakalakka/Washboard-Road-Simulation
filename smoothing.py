@@ -3,7 +3,7 @@ import numpy as np
 from road import Road
 from wheel import Wheel
 import sys
-
+from utils import print_road_surface
 
 # Idea: pass as maxh the current maximum height of the road
 def wind_smoothing(road: Road, maxh: int):
@@ -187,16 +187,17 @@ def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
     h_max = args[0]
     iterations = args[1]
     increment_h_max_wind = args[2] #At least value equal to 1
-
+    lower_bound_h_max_wind = args[3] #Our defaults: 1 or 2
     max_smoothing(road, h_max)
 
     for i in range(iterations):
          slope_smoothing(road)
 
     h_max_road = max(road.piles)
-    h_max_wind = max(h_max_road - increment_h_max_wind, road.height+2)
-
+    h_max_wind = max(h_max_road - increment_h_max_wind, road.height+lower_bound_h_max_wind)
     random_wind_smoothing(road, h_max_wind)
+
+
 
 def smoothing(road: Road, wheel: Wheel, method: str, smoothing_args: list):
     """

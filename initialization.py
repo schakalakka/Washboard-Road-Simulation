@@ -6,11 +6,11 @@ import sys
 debugging = False  # True
 verbose = False
 
-number_of_wheel_passes = 150  # number of 'vehicles' that pass through the road in the whole simulation
-road_size = 1000  # length of the road
-standard_height = 20  # standard height or initial height of the road
+number_of_wheel_passes = 100  # number of 'vehicles' that pass through the road in the whole simulation
+road_size = 30  # length of the road 1000
+standard_height = 1  # standard height or initial height of the road
 nr_of_irregular_points = int(road_size/10)  # number of irregularities for the Road.add_random_irregularities function
-wheel_size = 40  # (Initial) wheel diameter
+wheel_size = 4  # (Initial) wheel diameter 40
 velocity = 5  # Proportionality constant to jump (BETA) 2
 
 
@@ -39,14 +39,15 @@ smoothing_method = 'strategy 3'
 h_max = standard_height + 3
 h_max_wind = standard_height + 4
 slope_iterations = 6
-increment_h_max_wind = 1  # NOT WORKING, strategy3, eternal loop¿
+increment_h_max_wind = 1
+lower_bound_increment_h_max_wind = 1 # In fact it is: lower bound of h_max = road.height + l_b_i_h_max_wind
 
 if smoothing_method == 'strategy 1':
     smoothing_args = list([h_max, slope_iterations])
 elif smoothing_method == 'strategy 2':
     smoothing_args = list([h_max, slope_iterations, h_max_wind])
 elif smoothing_method == 'strategy 3':
-    smoothing_args = list([h_max, slope_iterations, increment_h_max_wind])
+    smoothing_args = list([h_max, slope_iterations, increment_h_max_wind, lower_bound_increment_h_max_wind])
 else:
     print('The smoothing method/strategy name is not valid')
     sys.exit()
