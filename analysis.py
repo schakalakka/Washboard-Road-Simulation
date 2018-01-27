@@ -13,11 +13,11 @@ wheel_sizes = [40]
 velocities = [2, 5, 10]
 h0_list = [1, 2, 3, 4]
 alphas = [0.1, 0.5, 1]
-smothing_methods = ['strategy 1', 'strategy 2']  # , 'strategy 3']
+smoothing_methods = ['strategy 1', 'strategy 2']  # , 'strategy 3']
 slope_iterations_list = [1, 2, 6, 10]
 h_max_list = [2, 3, 5]
 
-all_lists = [wheel_sizes, velocities, h0_list, alphas, smothing_methods, slope_iterations_list, h_max_list]
+all_lists = [wheel_sizes, velocities, h0_list, alphas, smoothing_methods, slope_iterations_list, h_max_list]
 print(len(list(itertools.product(*all_lists))))
 for i, element in enumerate(itertools.product(*all_lists)):
     if 600 <= i < 864:
