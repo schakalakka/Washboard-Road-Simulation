@@ -82,8 +82,7 @@ def max_smoothing(road: Road, maxh: int):
                             road.remove_grain(i)
                             break
 
-
-def slope_smoothing(road: Road):
+def slope_smoothing(road: Road, slope = 1):
     """
     Pairwise comparison of neighbouring elements in the road.
     If their height difference is bigger than one they grains from the bigger one are removed
@@ -96,10 +95,10 @@ def slope_smoothing(road: Road):
         height1 = road[i]
         height2 = road[i2]
         diff = height1 - height2
-        if diff > 1:
+        if diff > slope:
             road.add_grain(i2)
             road.remove_grain(i)
-        elif diff < -1:
+        elif diff < -slope:
             road.add_grain(i)
             road.remove_grain(i2)
 
@@ -201,7 +200,26 @@ def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
         h_max_wind = max(h_max_road - increment_h_max_wind, road.height+lower_bound_h_max_wind)
         random_wind_smoothing(road, h_max_wind)
 
+def smoothing_strategy4(road: Road, wheel: Wheel, args: list):
+    if len(args) != 6:
+        print('Error: incorrect number of arguments in smoothing_strategy4')
+        sys.exit()
+    h_max = args[0]
+    iterations = args[1]
+    increment_h_max_wind = args[2] #At least value equal to 1
+    lower_bound_h_max_wind = args[3] #Our defaults: 1 or 2
+    p_wind = args[4]
+    slope = args[5] #Default 1
 
+    #max_smoothing(road, h_max)
+
+    for i in range(iterations):
+         slope_smoothing(road, slope)
+
+    if (p_wind > random.random()):
+        h_max_road = max(road.piles)
+        h_max_wind = max(h_max_road - increment_h_max_wind, road.height+lower_bound_h_max_wind)
+        random_wind_smoothing(road, h_max_wind)
 
 def smoothing(road: Road, wheel: Wheel, method: str, smoothing_args: list):
     """
@@ -217,6 +235,8 @@ def smoothing(road: Road, wheel: Wheel, method: str, smoothing_args: list):
         return smoothing_strategy2(road, wheel, smoothing_args)
     elif method == 'strategy 3':
         return smoothing_strategy3(road, wheel, smoothing_args)
+    elif method == 'strategy 4':
+        return smoothing_strategy4(road, wheel, smoothing_args)
     else:
         print("Using default smoothing strategy 1.")
         return smoothing_strategy1(road, wheel, smoothing_args)
