@@ -158,11 +158,9 @@ def smoothing_strategy1(road: Road, wheel: Wheel, args: list):
     iterations = args[1]
 
     max_smoothing(road, h_max)
-    # print_road_surface(road, wheel.xf, wheel.diameter)
 
     for i in range(iterations):
         slope_smoothing(road)
-    # max_smoothing(road, (road.height+2) )
 
 
 def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
