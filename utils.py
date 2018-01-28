@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 from initialization import *
 
-def average_simulations(avg_iterations = 1):
+
+def average_simulations(avg_iterations=1):
     # from initialization import init
     from main import wheel_pass
     import numpy as np
@@ -23,20 +24,21 @@ def average_simulations(avg_iterations = 1):
         avg_profile += final_road_profile
         road.piles = initial_profile
 
-    avg_profile = avg_profile * (1.0/avg_iterations)
+    avg_profile = avg_profile * (1.0 / avg_iterations)
     road.piles = np.copy(avg_profile)
 
     plot_road(road)
 
 
-def plot_road(road: Road, kwargs=None):
+def plot_road(road: Road, kwargs=None, exaggeration=1):
     """
     Plots the road surface via matplotlib for a better smoother display.
     :param road:
     :return:
     """
+    # exaggeration = 10  # this parameter is for amplifying the amplitude, 1 is the normal plot
     plt.clf()
-    plt.plot(road.piles)
+    plt.plot((road.piles - road.height) * exaggeration + standard_height)
     plt.xlabel('Distance (block size units)')
     plt.ylabel('Surface height (block size units)')
     plt.title('Road surface profile')
@@ -51,15 +53,19 @@ def plot_road(road: Road, kwargs=None):
     # plt.axes().set_aspect('equal', 'datalim')
     x_min = 0
     x_max = road.size
-    y_min = min(road.piles) - 10
-    y_max = max(road.piles) + 10
+    y_min = min((road.piles - road.height) * exaggeration + road.height) - 5
+    y_max = max((road.piles - road.height) * exaggeration + road.height) + 5
     plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
 
     if kwargs:
-        plt.savefig(f'plots/{file_string}.png', dpi=900, format='png')
+        plt.savefig(f'plots/{file_string}_ex{exaggeration}.png', dpi=200, format='png')
+        if exaggeration == 1:
+            plot_road(road, kwargs, exaggeration=10)
     else:
-        plt.show()
+        plt.savefig('plots/plot.png', dpi=900, format='png')
+        # plt.show()
+
 
 def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
     """

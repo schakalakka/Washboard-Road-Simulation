@@ -7,11 +7,11 @@ debugging = False  # True
 verbose = False
 
 number_of_wheel_passes = 100  # number of 'vehicles' that pass through the road in the whole simulation
-road_size = 30  # length of the road 1000
-standard_height = 1  # standard height or initial height of the road
+road_size = 500  # length of the road 1000
+standard_height = 10  # standard height or initial height of the road
 nr_of_irregular_points = int(road_size/10)  # number of irregularities for the Road.add_random_irregularities function
-wheel_size = 4  # (Initial) wheel diameter 40
-velocity = 5  # Proportionality constant to jump (BETA) 2
+wheel_size = 10  # (Initial) wheel diameter 40
+velocity = 3  # Proportionality constant to jump (BETA) 2
 
 
 #########################################################
