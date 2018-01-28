@@ -181,8 +181,8 @@ def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
     random_wind_smoothing(road, h_max_wind)
 
 def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
-    if len(args) != 3:
-        print('Error: incorrect number of arguments in smoothing_strategy2')
+    if len(args) != 4:
+        print('Error: incorrect number of arguments in smoothing_strategy 3')
         sys.exit()
     h_max = args[0]
     iterations = args[1]
