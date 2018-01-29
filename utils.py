@@ -36,7 +36,7 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
     :param road:
     :return:
     """
-    # exaggeration = 10  # this parameter is for amplifying the amplitude, 1 is the normal plot
+    exaggeration = 1  # this parameter is for amplifying the amplitude, 1 is the normal plot
     plt.clf()
     plt.plot((road.piles - road.height) * exaggeration + road.height)
     plt.xlabel('Distance (block size units)')
@@ -53,8 +53,8 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
     # plt.axes().set_aspect('equal', 'datalim')
     x_min = 0
     x_max = road.size
-    y_min = min((road.piles - road.height) * exaggeration + road.height) - 5
-    y_max = max((road.piles - road.height) * exaggeration + road.height) + 5
+    y_min = 0 #min((road.piles - road.height) * exaggeration + road.height) - 5
+    y_max = max((road.piles - road.height) * exaggeration + road.height) + 10
     plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
 
@@ -63,8 +63,8 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
         if exaggeration == 1:
             plot_road(road, kwargs, exaggeration=10)
     else:
-        plt.savefig('plots/plot.png', dpi=900, format='png')
-        # plt.show()
+        #plt.savefig('plots/plot.png', dpi=900, format='png')
+        plt.show()
 
 
 def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):
