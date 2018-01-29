@@ -54,7 +54,7 @@ slope_iterations = 6
 increment_h_max_wind = 1
 lower_bound_increment_h_max_wind = 1 # In fact it is: lower bound of h_max = road.height + l_b_i_h_max_wind
 p_wind = 0 #Probability of wind effects occurring in each call to the general smoothing function
-slope = 4 # arctan(slope)*360/(2*pi) gives the angle of repose that the bumps will tend by applying slope_smoothing
+slope = 1 # arctan(slope)*360/(2*pi) gives the angle of repose that the bumps will tend by applying slope_smoothing
 
 if smoothing_method == 'strategy 1':
     smoothing_args = list([h_max, slope_iterations])
