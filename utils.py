@@ -38,7 +38,7 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
     """
     # exaggeration = 10  # this parameter is for amplifying the amplitude, 1 is the normal plot
     plt.clf()
-    plt.plot((road.piles - road.height) * exaggeration + standard_height)
+    plt.plot((road.piles - road.height) * exaggeration + road.height)
     plt.xlabel('Distance (block size units)')
     plt.ylabel('Surface height (block size units)')
     plt.title('Road surface profile')
