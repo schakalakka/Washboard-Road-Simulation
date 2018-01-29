@@ -6,16 +6,13 @@ from utils import plot_road
 
 from initialization import *
 
-wheel_sizes = [3, 10]
-velocities = [3, 11]
+wheel_sizes = [3, 5, 7, 10, 20, 21, 30]
+velocities = [3, 5, 6, 11, 20]
 
-alphas = [0.1, 0.5, 1]
+alphas = [0.1, 0.5, 0.7, 1]
+p_wind_list = [0, 0.1, 0.2, 0.5, 1]
 
-smoothing_methods = ['strategy 1', 'strategy 2', 'strategy 3']
-slope_iterations_list = [1, 6, 10]
-# h_max_list = [2, 3, 5]
-
-all_lists = [wheel_sizes, velocities, alphas, smoothing_methods, slope_iterations_list]
+all_lists = [wheel_sizes, velocities, alphas]
 print(len(list(itertools.product(*all_lists))))
 
 
@@ -34,5 +31,30 @@ def func(tup):
     main(parameter_dict)
 
 
-with Pool(5) as p:
-    p.map(func, [(i, x) for i, x in enumerate(itertools.product(*all_lists))])
+# with Pool(5) as p:
+#     p.map(func, [(i, x) for i, x in enumerate(itertools.product(*all_lists))])
+
+
+print('velocity')
+from initialization import *
+
+for velocity in velocities:
+    main({'velocity': velocity})
+
+print('wheel_size')
+from initialization import *
+
+for wheel_size in wheel_sizes:
+    main({'wheel_size': wheel_size})
+
+print('alpha')
+from initialization import *
+
+for alpha in alphas:
+    main({'alpha': alpha})
+
+print('p_wind')
+from initialization import *
+
+for p_wind in p_wind_list:
+    main({'p_wind': p_wind})

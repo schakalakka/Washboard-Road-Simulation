@@ -153,7 +153,8 @@ def main(kwargs=None):
     if verbose:
         print_road_surface(road, wheel.xf, wheel.diameter)
 
-    plot_road(road, kwargs)
+    # plot_road(road, kwargs)
+    road_to_csv(road, kwargs)
 
 
 if __name__ == '__main__':

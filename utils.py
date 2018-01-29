@@ -1,6 +1,8 @@
 from road import Road
 import pickle
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 from initialization import *
 
@@ -53,7 +55,7 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
     # plt.axes().set_aspect('equal', 'datalim')
     x_min = 0
     x_max = road.size
-    y_min = 0 #min((road.piles - road.height) * exaggeration + road.height) - 5
+    y_min = 0  # min((road.piles - road.height) * exaggeration + road.height) - 5
     y_max = max((road.piles - road.height) * exaggeration + road.height) + 10
     plt.axis([x_min, x_max, y_min, y_max])
     plt.axes().set_aspect('equal', 'box')
@@ -116,3 +118,13 @@ def read_road(input_filename: str):
     with open(input_filename, 'rb') as input:
         road = pickle.load(input)
     return road
+
+
+def road_to_csv(road: Road, kwargs):
+    # np.savetxt("foo.csv", np.asarray(road.piles), delimiter=";")
+    df = pd.DataFrame(road.piles)
+
+    if kwargs:
+        file_string = ''.join(f'{key}-{value}'.replace('.', '') for key, value in kwargs.items())
+
+    df.to_csv(f"csv/{file_string}.csv")
