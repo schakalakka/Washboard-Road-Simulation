@@ -105,8 +105,13 @@ def main(kwargs=None):
     # random.seed(2)
     if read_initial_road:
         road = read_road(initial_road_filename)
-    else:
+    elif random_road:
         road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
+    else:
+        step = 10
+        rang = range(step, road_size,step)
+        road = Road(road_size, standard_height, 'specific', list([rang]), list([1 for i in rang]))
+
 
     #Initial road equidistant
     if save_initial_road:

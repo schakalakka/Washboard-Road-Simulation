@@ -63,8 +63,8 @@ def plot_road(road: Road, kwargs=None, exaggeration=1):
         if exaggeration == 1:
             plot_road(road, kwargs, exaggeration=10)
     else:
-        #plt.savefig('plots/plot.png', dpi=900, format='png')
-        plt.show()
+        plt.savefig('plots/plot.png', dpi=900, format='png')
+        # plt.show()
 
 
 def print_road_surface(road: Road, wheel_pos=None, wheel_size=None):

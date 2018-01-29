@@ -6,6 +6,7 @@ import sys
 from utils import print_road_surface
 import random
 
+
 # Idea: pass as maxh the current maximum height of the road
 def wind_smoothing(road: Road, maxh: int):
     """
@@ -82,7 +83,8 @@ def max_smoothing(road: Road, maxh: int):
                             road.remove_grain(i)
                             break
 
-def slope_smoothing(road: Road, slope = 1):
+
+def slope_smoothing(road: Road, slope=1):
     """
     Pairwise comparison of neighbouring elements in the road.
     If their height difference is bigger than one they grains from the bigger one are removed
@@ -177,8 +179,9 @@ def smoothing_strategy2(road: Road, wheel: Wheel, args: list):
     for i in range(iterations):
         slope_smoothing(road)
 
-    if(p_wind > random.random()):
+    if (p_wind > random.random()):
         random_wind_smoothing(road, h_max_wind)
+
 
 def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
     if len(args) != 5:
@@ -186,19 +189,20 @@ def smoothing_strategy3(road: Road, wheel: Wheel, args: list):
         sys.exit()
     h_max = args[0]
     iterations = args[1]
-    increment_h_max_wind = args[2] #At least value equal to 1
-    lower_bound_h_max_wind = args[3] #Our defaults: 1 or 2
+    increment_h_max_wind = args[2]  # At least value equal to 1
+    lower_bound_h_max_wind = args[3]  # Our defaults: 1 or 2
     p_wind = args[4]
+
+    if p_wind > random.random():
+        h_max_road = max(road.piles)
+        h_max_wind = max(h_max_road - increment_h_max_wind, road.height + lower_bound_h_max_wind)
+        random_wind_smoothing(road, h_max_wind)
 
     max_smoothing(road, h_max)
 
     for i in range(iterations):
-         slope_smoothing(road)
+        slope_smoothing(road)
 
-    if (p_wind > random.random()):
-        h_max_road = max(road.piles)
-        h_max_wind = max(h_max_road - increment_h_max_wind, road.height+lower_bound_h_max_wind)
-        random_wind_smoothing(road, h_max_wind)
 
 def smoothing_strategy4(road: Road, wheel: Wheel, args: list):
     if len(args) != 6:
@@ -206,20 +210,21 @@ def smoothing_strategy4(road: Road, wheel: Wheel, args: list):
         sys.exit()
     h_max = args[0]
     iterations = args[1]
-    increment_h_max_wind = args[2] #At least value equal to 1
-    lower_bound_h_max_wind = args[3] #Our defaults: 1 or 2
+    increment_h_max_wind = args[2]  # At least value equal to 1
+    lower_bound_h_max_wind = args[3]  # Our defaults: 1 or 2
     p_wind = args[4]
-    slope = args[5] #Default 1
+    slope = args[5]  # Default 1
 
-    #max_smoothing(road, h_max)
+    # max_smoothing(road, h_max)
 
     for i in range(iterations):
-         slope_smoothing(road, slope)
+        slope_smoothing(road, slope)
 
     if (p_wind > random.random()):
         h_max_road = max(road.piles)
-        h_max_wind = max(h_max_road - increment_h_max_wind, road.height+lower_bound_h_max_wind)
+        h_max_wind = max(h_max_road - increment_h_max_wind, road.height + lower_bound_h_max_wind)
         random_wind_smoothing(road, h_max_wind)
+
 
 def smoothing(road: Road, wheel: Wheel, method: str, smoothing_args: list):
     """
