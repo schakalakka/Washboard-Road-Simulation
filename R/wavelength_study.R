@@ -1,3 +1,6 @@
+
+library(Hmisc)
+
 path = "C:/Users/Daniel/Dropbox/GitHub/Washboards-Simulation/csv"
 setwd(path)
 
@@ -5,7 +8,8 @@ files <- list.files(path)
 show(files)
 
 #road.x | road.f
-road <- read.csv(files[1])
+road <- read.csv(files[2])
+
 colnames(road) <- c("x", "f")
 x_max = max(road$x)
 
@@ -16,6 +20,11 @@ x_max = max(road$x)
  # y_sin = sin(2*pi*x_sin)
  # sin_data = data.frame(x= x_sin, f = y_sin)
 
+  # x_sin = seq(0,x_max, 1)
+  # y_sin = 10*cos((2*pi)/(60)*x_sin)+100
+  # sin_data = data.frame(x= x_sin, f = y_sin)
+  #plot(sin_data$x, sin_data$f, type = 'l', asp = asp_ratio)
+
 data = road
 data$f = data$f - mean(data$f)
 
@@ -25,6 +34,9 @@ data$f = data$f - mean(data$f)
   asp_ratio = 1
   lag_max = x_max
   par(mfrow = c(1,2))
+  cex.lab = 1.25
+  cex.main = 1.25
+  
   
 # #Plot road's surface
 #   plot(data, type = 'l', asp = asp_ratio,
@@ -63,10 +75,12 @@ acf_disc <- function(ts = road$f, x =road$x,
 
 acf_disc(data$f, 0:(length(data$x)-1), 0, length(data$x) )
 
-
+###############################################
+#Plotting road's surface and autocorrelation
+################################################
 
 lags = seq(0, x_max+1, 1)
-lags = seq(-(x_max+1)/2, (x_max+1)/2, 1)
+#lags = seq(-(x_max+1)/2, (x_max+1)/2, 1)
 
 acfs = numeric(length(lags))
 i=1
@@ -76,17 +90,51 @@ for(lambda in lags){
   i=i+1
 }
 
-par(mfrow = c(1,1))
-maxima = lags[which(diff(sign(diff(acfs)))==-2)]+1
+#dev.off()
+par(mfrow = c(1,2))
+maxima = lags[which(diff(sign(diff(acfs)))==-2)]
 
 ini = 0#150
 fin = 500#115
-plot(road$x[ini:fin], road$f[ini:fin], type = 'l', asp = asp_ratio,
-     lwd = lwd)
-abline(v = seq(0,fin, (maxima[2]-maxima[1]+1)  ) )
+x = road$x[ini:fin]
+y = road$f[ini:fin]
+plot(x, y , type = 'l', asp = asp_ratio,
+     lwd = lwd,
+     ylab = "",
+     main = expression("Road surface, " ~ alpha ~ "=0.1" ),
+     xlab = "Horizontal position, x (block size units)",
+      cex.lab = cex.lab,
+      cex.main = cex.main
+     )
+title(ylab = "Road height, f(x) (block size units)", line = 2,
+      cex.lab = cex.lab)
+abline(v = seq(0,fin, (maxima[2]-maxima[1]-2)  ), lty = 2)
+abline(h = 0)
+polygon(c(0, 1:fin,fin), c(0, road$f*0.98  ,0), col=gray(0.95), border=NA)
 
-plot(lags, acfs, type = 'l')
-abline(v = maxima)
+minor.tick(nx=2, ny=10, tick.ratio=0.5)
+
+
+#polygon(c(0, 1:fin,fin), c(-400, x*0  ,-400), col=gray(0.1), border=NA)
+
+# plot(range(x), c(0, max(y)), type='n', xlab="X", ylab="Y")
+# 
+# polygon(c(0, 1:500,500), c(20, road$f  ,20), col=1, border=NA)
+
+plot(lags, acfs, type = 'l', lwd = lwd,
+     main = expression("Autocorrelation function"),
+     ylab = "",
+     xlab = "Lag, k (block size units)",
+      cex.lab = cex.lab,
+      cex.main = cex.main
+     )
+title(ylab = expression('R'[f]('k')  ~" (ACF)"),line = 2,
+      cex.lab = cex.lab)
+
+abline(v = maxima, lty = 2)
+minor.tick(nx=2, ny=5, tick.ratio=0.5)
+####################################################################
+#####################################################################
 
 average_wavelength <- function(maxima){
   sum=0
@@ -100,3 +148,85 @@ average_wavelength <- function(maxima){
 
 wavelength = average_wavelength(maxima)
 show(maxima)
+
+############################################################
+#Plot sinus 
+############################################################
+
+# #sinus profile
+# #x_max = 10*4
+# #x_step = 0.05
+# x_sin = seq(0,x_max, 1)
+# y_sin = 0.2*sin((2*pi)/(60)*x_sin)
+# sin_data = data.frame(x= x_sin, f = y_sin)
+# plot(sin_data$x, sin_data$f, type = 'l', asp = asp_ratio)
+
+
+#par(mfrow = c(1,2))
+
+
+
+
+x_sin = seq(0,x_max, 1)
+lambda = 60
+y_sin = 10*cos((2*pi)/(lambda)*x_sin)+100
+sin_data = data.frame(x= x_sin, f = y_sin)
+data = sin_data
+data$f = data$f - mean(data$f)
+
+ini = 0#150
+fin = length(data$x)#115
+x = data$x[ini:fin]
+y = sin_data$f[ini:fin]
+
+lags = seq(0, x_max+1, 1)
+#lags = seq(-(x_max+1)/2, (x_max+1)/2, 1)
+
+acfs = numeric(length(lags))
+i=1
+for(lambda in lags){
+  acfs[i] = acf_disc(data$f, 0:(length(data$x)-1), 
+                     lambda, length(data$x) )
+  i=i+1
+}
+maxima = lags[which(diff(sign(diff(acfs)))==-2)]+1
+
+
+plot(x, y , type = 'l', asp = asp_ratio,
+     lwd = lwd,
+     ylab = "",
+     main = expression("Sinusoidal surface, " ~ lambda ~ "=60" ),
+     xlab = "Horizontal position, x (block size units)",
+     cex.lab = cex.lab,
+     cex.main = cex.main
+)
+title(ylab = expression("g(x)="  ~10 ~ cos(2*pi~'/' ~lambda~ 'x')~'+100'~" (block size units)"), line = 2,
+      cex.lab = cex.lab)
+abline(v = seq(0,fin, (maxima[2]-maxima[1])  ), lty = 2)
+abline(h = 0)
+polygon(c(0, 1:fin,fin), c(0, sin_data$f*0.98  ,0), col=gray(0.95), border=NA)
+
+minor.tick(nx=2, ny=10, tick.ratio=0.5)
+
+
+#polygon(c(0, 1:fin,fin), c(-400, x*0  ,-400), col=gray(0.1), border=NA)
+
+# plot(range(x), c(0, max(y)), type='n', xlab="X", ylab="Y")
+# 
+# polygon(c(0, 1:500,500), c(20, road$f  ,20), col=1, border=NA)
+
+
+
+
+plot(lags, acfs, type = 'l', lwd = lwd,
+     main = expression("Autocorrelation function"),
+     ylab = "",
+     xlab = "Lag, k (block size units)",
+     cex.lab = cex.lab,
+     cex.main = cex.main
+)
+title(ylab = expression('R'[g]('k')  ~" (ACF)"),line = 2,
+      cex.lab = cex.lab)
+
+abline(v = maxima, lty = 2)
+minor.tick(nx=2, ny=5, tick.ratio=0.5)
