@@ -43,7 +43,8 @@ def wheel_pass(road: Road, wheel: Wheel, max_iterations: int, bump_method: str,
             wheel.number_of_passes += 1
             if verbose:
                 print(f'\nIteration number {wheel.number_of_passes}')
-                print(f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
+                print(
+                    f'The number of grains is {road.get_number_of_grains()}, the initial was {road.initial_number_of_grains}\n')
                 print_road_surface(road, wheel.xf, wheel.diameter)
 
 
@@ -107,17 +108,17 @@ def main(kwargs=None):
         road = read_road(initial_road_filename)
     elif random_road:
         road = Road(road_size, standard_height, 'random', list([None]), list([nr_of_irregular_points]))
+        road_to_csv(road, kwargs)
     else:
         step = 10
-        rang = range(step, road_size,step)
+        rang = range(step, road_size, step)
         road = Road(road_size, standard_height, 'specific', list([rang]), list([1 for i in rang]))
 
-
-    #Initial road equidistant
+    # Initial road equidistant
     if save_initial_road:
         if initial_road_filename == 'initial_road_equidistant.pkl':
             step = 10
-            rang = range(step, road_size,step)
+            rang = range(step, road_size, step)
             road = Road(road_size, standard_height, 'specific', list([rang]), list([1 for i in rang]))
         save_road(road, initial_road_filename)
         print(f'Initial road saved with name {initial_road_filename}')
