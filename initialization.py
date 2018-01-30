@@ -23,7 +23,7 @@ else:
     wheel_size = 10  # road_size/50
     standard_height = 100  # standard height or initial height of the road
 
-nr_of_irregular_points = int(road_size / 50)  # number of irregularities for the Road.add_random_irregularities function
+nr_of_irregular_points = int(road_size / 10)  # number of irregularities for the Road.add_random_irregularities function
 
 velocity = 11  # Proportionality constant to jump (BETA) 2
 
