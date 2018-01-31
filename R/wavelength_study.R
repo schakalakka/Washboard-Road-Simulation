@@ -8,7 +8,7 @@ files <- list.files(path)
 show(files)
 
 #road.x | road.f
-filenum = 13
+filenum = 11
 road <- read.csv(files[filenum])
 
 colnames(road) <- c("x", "f")
@@ -102,16 +102,16 @@ y = road$f[ini:fin]
 plot(x, y, type = 'l', asp = 10,
      lwd = lwd,
      ylab = "",
-     main = expression("Road surface, " ~ alpha ~ "=0.1" ),
+     main = expression("Initial road surface, " ~ alpha ~ "=0.1" ),
      xlab = "Horizontal position, x (block size units)",
      cex.lab = cex.lab,
      cex.main = cex.main
 )
-title(ylab = "Road height, f(x) (block size units)", line = 2,
+title(ylab = "Initial f(x) (block size units)", line = 2,
       cex.lab = cex.lab)
 #abline(v = seq(0,fin, (maxima[2]-maxima[1]-2)  ), lty = 2)
 abline(h = 0)
-polygon(c(0, 1:fin,fin), c(0, road$f*1  ,0), col=gray(0.95), border=NA)
+polygon(c(0, 1:fin,fin), c(90, road$f*1  ,90), col=gray(0.95), border=NA)
 
 #minor.tick(nx=2, ny=10, tick.ratio=0.5)
 
@@ -135,7 +135,7 @@ for(lambda in lags){
 #dev.off()
 
 plot(lags, acfs, type = 'l', lwd = lwd,
-     main = expression("Autocorrelation function"),
+     main = expression("Initial autocorrelation function"),
      ylab = "",
      xlab = "Lag, k (block size units)",
      cex.lab = cex.lab,
@@ -173,7 +173,20 @@ for(lambda in lags){
 
 #dev.off()
 #par(mfrow = c(1,2))
+
 maxima = lags[which(diff(sign(diff(acfs)))==-2)]
+if(files[filenum]=="attempt-4_after.csv"){
+  maxima = c( 36,  74, 107,  143, 188, 222, 276, 310,
+              355,  391, 424,              462)
+  }
+if( files[filenum]=="attempt-5_after.csv" ){
+  maxima = c(  37, 73, 107, 141, 179, 211, 249, 287, 
+               319, 357, 391, 427, 461)
+}
+
+if( files[filenum]=="attempt-3_after.csv" ){
+  maxima = c(  47, 100,  149, 202, 249, 296, 349, 398, 451)
+}
 
 ini = 0#150
 fin = 500#115
@@ -182,18 +195,18 @@ y = road$f[ini:fin]
 plot(x, y , type = 'l', asp = asp_ratio,
      lwd = lwd,
      ylab = "",
-     main = expression("Road surface, " ~ alpha ~ "=0.1" ),
+     main = expression("Final road surface, " ~ alpha ~ "=0.1" ),
      xlab = "Horizontal position, x (block size units)",
       cex.lab = cex.lab,
       cex.main = cex.main
      )
-title(ylab = "Road height, f(x) (block size units)", line = 2,
+title(ylab = "Final f(x) (block size units)", line = 2,
       cex.lab = cex.lab)
 abline(v = seq(0,fin, (maxima[2]-maxima[1]-2)  ), lty = 2)
 abline(h = 0)
 polygon(c(0, 1:fin,fin), c(0, road$f*0.98  ,0), col=gray(0.95), border=NA)
 
-minor.tick(nx=2, ny=10, tick.ratio=0.5)
+#minor.tick(nx=2, ny=10, tick.ratio=0.5)
 
 
 #polygon(c(0, 1:fin,fin), c(-400, x*0  ,-400), col=gray(0.1), border=NA)
@@ -203,7 +216,7 @@ minor.tick(nx=2, ny=10, tick.ratio=0.5)
 # polygon(c(0, 1:500,500), c(20, road$f  ,20), col=1, border=NA)
 
 plot(lags, acfs, type = 'l', lwd = lwd,
-     main = expression("Autocorrelation function"),
+     main = expression("Final autocorrelation function"),
      ylab = "",
      xlab = "Lag, k (block size units)",
       cex.lab = cex.lab,
@@ -213,7 +226,7 @@ title(ylab = expression('R'[f]('k')  ~" (ACF)"),line = 2,
       cex.lab = cex.lab)
 
 abline(v = maxima, lty = 2)
-minor.tick(nx=2, ny=5, tick.ratio=0.5)
+#minor.tick(nx=2, ny=5, tick.ratio=0.5)
 ####################################################################
 #####################################################################
 
