@@ -8,7 +8,8 @@ files <- list.files(path)
 show(files)
 
 #road.x | road.f
-road <- read.csv(files[2])
+filenum = 13
+road <- read.csv(files[filenum])
 
 colnames(road) <- c("x", "f")
 x_max = max(road$x)
@@ -78,6 +79,47 @@ acf_disc(data$f, 0:(length(data$x)-1), 0, length(data$x) )
 ###############################################
 #Plotting road's surface and autocorrelation
 ################################################
+#######
+# Initial road profile
+############
+
+
+road <- read.csv(files[filenum+1])
+
+colnames(road) <- c("x", "f")
+x_max = max(road$x)
+
+data = road
+data$f = data$f - mean(data$f)
+
+par(mfrow = c(2,2))
+maxima = lags[which(diff(sign(diff(acfs)))==-2)]
+
+ini = 0#150
+fin = 500#115
+x = road$x[ini:fin]
+y = road$f[ini:fin]
+plot(x, y, type = 'l', asp = 10,
+     lwd = lwd,
+     ylab = "",
+     main = expression("Road surface, " ~ alpha ~ "=0.1" ),
+     xlab = "Horizontal position, x (block size units)",
+     cex.lab = cex.lab,
+     cex.main = cex.main
+)
+title(ylab = "Road height, f(x) (block size units)", line = 2,
+      cex.lab = cex.lab)
+#abline(v = seq(0,fin, (maxima[2]-maxima[1]-2)  ), lty = 2)
+abline(h = 0)
+polygon(c(0, 1:fin,fin), c(0, road$f*1  ,0), col=gray(0.95), border=NA)
+
+#minor.tick(nx=2, ny=10, tick.ratio=0.5)
+
+
+
+
+
+
 
 lags = seq(0, x_max+1, 1)
 #lags = seq(-(x_max+1)/2, (x_max+1)/2, 1)
@@ -91,7 +133,46 @@ for(lambda in lags){
 }
 
 #dev.off()
-par(mfrow = c(1,2))
+
+plot(lags, acfs, type = 'l', lwd = lwd,
+     main = expression("Autocorrelation function"),
+     ylab = "",
+     xlab = "Lag, k (block size units)",
+     cex.lab = cex.lab,
+     cex.main = cex.main
+)
+title(ylab = expression('R'[f]('k')  ~" (ACF)"),line = 2,
+      cex.lab = cex.lab)
+
+#abline(v = maxima, lty = 2)
+#minor.tick(nx=2, ny=5, tick.ratio=0.5)
+
+
+
+####################
+#FINAL SURFACE
+###############
+road <- read.csv(files[filenum])
+
+colnames(road) <- c("x", "f")
+x_max = max(road$x)
+data = road
+data$f = data$f - mean(data$f)
+
+
+lags = seq(0, x_max+1, 1)
+#lags = seq(-(x_max+1)/2, (x_max+1)/2, 1)
+
+acfs = numeric(length(lags))
+i=1
+for(lambda in lags){
+  acfs[i] = acf_disc(data$f, 0:(length(data$x)-1), 
+                     lambda, length(data$x) )
+  i=i+1
+}
+
+#dev.off()
+#par(mfrow = c(1,2))
 maxima = lags[which(diff(sign(diff(acfs)))==-2)]
 
 ini = 0#150
@@ -230,3 +311,7 @@ title(ylab = expression('R'[g]('k')  ~" (ACF)"),line = 2,
 
 abline(v = maxima, lty = 2)
 minor.tick(nx=2, ny=5, tick.ratio=0.5)
+
+###########################################################
+############################################################
+
