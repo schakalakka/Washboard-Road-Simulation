@@ -113,6 +113,7 @@ def main(kwargs=None):
         step = 10
         rang = range(step, road_size, step)
         road = Road(road_size, standard_height, 'specific', list([rang]), list([1 for i in rang]))
+        road_to_csv(road, kwargs)
 
     # Initial road equidistant
     if save_initial_road:
@@ -159,4 +160,24 @@ def main(kwargs=None):
 
 
 if __name__ == '__main__':
-    main()
+
+    velocities = [3, 5, 6, 11, 20]
+    wheel_sizes = [3, 5, 7, 10, 20, 21, 30]
+    alphas = [0, 0.1, 0.5, 0.7, 1, 1000]
+    p_wind_list = [0, 0.1, 0.2, 0.5, 1]
+    # for elem in velocities:
+    #     velocity = elem
+    #     main({'velocity': velocity})
+
+    # for elem in wheel_sizes:
+    #     wheel_size = elem
+    #     main({'wheel_size': wheel_size})
+
+    for alpha in alphas:
+        dig_probability_args = [h0, alpha]
+        main({'alpha': alpha})
+
+    # for p_wind in p_wind_list:
+    #     smoothing_args = [h_max, slope_iterations, increment_h_max_wind, lower_bound_increment_h_max_wind, p_wind]
+    #     main({'p_wind': p_wind})
+    # main()
