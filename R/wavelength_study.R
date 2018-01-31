@@ -8,7 +8,8 @@ files <- list.files(path)
 show(files)
 
 #road.x | road.f
-filenum = 11
+filenum = 2
+regular_road = TRUE
 road <- read.csv(files[filenum])
 
 colnames(road) <- c("x", "f")
@@ -84,7 +85,13 @@ acf_disc(data$f, 0:(length(data$x)-1), 0, length(data$x) )
 ############
 
 
-road <- read.csv(files[filenum+1])
+
+
+if(regular_road){
+  road <- read.csv("regular-road.csv")
+} else{
+  road <- read.csv(files[filenum+1])
+}
 
 colnames(road) <- c("x", "f")
 x_max = max(road$x)
