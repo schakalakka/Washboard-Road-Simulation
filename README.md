@@ -55,8 +55,6 @@ accessed 27-January-2018].
 accessed 30-January-2018].
 * [15] Juan Pablo Bello. Periodicity detection, Course: MPATE-GE 2623 Music Information Retrieval.
 New York University.
-* [16] R.B.L.; Carson R.M. Stoddart, J.; Smith. Transporting engineering journal. ASCE, page 376,
-1982.
-26
+* [16] R.B.L.; Carson R.M. Stoddart, J.; Smith. Transporting engineering journal. ASCE, page 376, 1982.
 
 ## License
