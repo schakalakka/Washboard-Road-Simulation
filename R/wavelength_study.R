@@ -8,8 +8,8 @@ files <- list.files(path)
 show(files)
 
 #road.x | road.f
-filenum = 2
-regular_road = TRUE
+filenum = 13
+regular_road = FALSE
 road <- read.csv(files[filenum])
 
 colnames(road) <- c("x", "f")
@@ -109,7 +109,7 @@ y = road$f[ini:fin]
 plot(x, y, type = 'l', asp = 10,
      lwd = lwd,
      ylab = "",
-     main = expression("Initial road surface, " ~ alpha ~ "=0.1" ),
+     main = expression("Initial road surface"),
      xlab = "Horizontal position, x (block size units)",
      cex.lab = cex.lab,
      cex.main = cex.main
@@ -202,7 +202,7 @@ y = road$f[ini:fin]
 plot(x, y , type = 'l', asp = asp_ratio,
      lwd = lwd,
      ylab = "",
-     main = expression("Final road surface, " ~ alpha ~ "=0.1" ),
+     main = expression("Final road surface" ),
      xlab = "Horizontal position, x (block size units)",
       cex.lab = cex.lab,
       cex.main = cex.main
