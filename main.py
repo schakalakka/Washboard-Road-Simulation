@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     velocities = [3, 5, 6, 11, 20]
     wheel_sizes = [3, 5, 7, 10, 20, 21, 30]
-    alphas = [0, 0.1, 0.5, 0.7, 1, 1000]
+    alphas = [3,5]#[0, 0.5, 1, 2, 10]
     p_wind_list = [0, 0.1, 0.2, 0.5, 1]
     # for elem in velocities:
     #     velocity = elem
